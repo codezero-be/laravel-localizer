@@ -21,7 +21,7 @@
 
 ## Install
 
-```php
+```bash
 composer require codezero/laravel-localizer
 ```
 
@@ -29,22 +29,35 @@ Laravel will automatically register the ServiceProvider.
 
 #### Add Middleware
 
-Add the middleware to the `web` middleware group in `app/Http/Kernel.php` after `StartSession`:
+Add the middleware to the `web` middleware group in `app/Http/Kernel.php`, after `StartSession` and before `SubstituteBindings`:
 
 ```php
 protected $middlewareGroups = [
     'web' => [
-        //...
-        \Illuminate\Session\Middleware\StartSession::class,
+        \Illuminate\Session\Middleware\StartSession::class, // <= after this
         //...
         \CodeZero\Localizer\Middleware\SetLocale::class,
+        //...
+        \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
     ],
+];
+```
+
+In Laravel 6.x you also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php` to trigger it in the correct order:
+
+```php
+protected $middlewarePriority = [
+    \Illuminate\Session\Middleware\StartSession::class, // <= after this
+    //...
+    \CodeZero\Localizer\Middleware\SetLocale::class,
+    //...
+    \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
 ];
 ```
 
 #### Publish Configuration File
 
-```php
+```bash
 php artisan vendor:publish --provider="CodeZero\Localizer\LocalizerServiceProvider" --tag="config"
 ```
 
@@ -62,9 +75,9 @@ Add any locales you wish to support to your published `config/localizer.php` fil
 
 #### Detectors
 
-By default the middleware will use the following detectors for a supported locale:
+By default the middleware will use the following detectors to check for a supported locale in:
 
-1. The URL
+1. The URL slug
 2. The session
 3. A cookie
 4. The browser
