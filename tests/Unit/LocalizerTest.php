@@ -14,7 +14,7 @@ class LocalizerTest extends TestCase
     /** @test */
     public function it_loops_through_the_detectors_and_returns_the_first_supported_locale()
     {
-        $locales = ['en', 'nl'];
+        $supportedLocales = ['en', 'nl'];
         $detectors = [
             Mockery::mock(Detector::class)->allows()->detect()->andReturns(false)->getMock(),
             Mockery::mock(Detector::class)->allows()->detect()->andReturns(null)->getMock(),
@@ -23,7 +23,7 @@ class LocalizerTest extends TestCase
             Mockery::mock(Detector::class)->allows()->detect()->andReturns('en')->getMock(),
         ];
 
-        $localizer = new Localizer($locales, $detectors);
+        $localizer = new Localizer($supportedLocales, $detectors);
 
         $this->assertEquals('nl', $localizer->detect());
     }
@@ -31,12 +31,12 @@ class LocalizerTest extends TestCase
     /** @test */
     public function it_returns_the_best_match_if_an_array_of_locales_is_detected()
     {
-        $locales = ['en', 'nl'];
+        $supportedLocales = ['en', 'nl'];
         $detectors = [
             Mockery::mock(Detector::class)->allows()->detect()->andReturns(['de', 'nl', 'en'])->getMock(),
         ];
 
-        $localizer = new Localizer($locales, $detectors);
+        $localizer = new Localizer($supportedLocales, $detectors);
 
         $this->assertEquals('nl', $localizer->detect());
     }
@@ -44,7 +44,7 @@ class LocalizerTest extends TestCase
     /** @test */
     public function it_returns_false_if_no_supported_locale_could_be_detected()
     {
-        $locales = ['en'];
+        $supportedLocales = ['en'];
         $detectors = [
             Mockery::mock(Detector::class)->allows()->detect()->andReturns(false)->getMock(),
             Mockery::mock(Detector::class)->allows()->detect()->andReturns(null)->getMock(),
@@ -53,7 +53,7 @@ class LocalizerTest extends TestCase
             Mockery::mock(Detector::class)->allows()->detect()->andReturns('fr')->getMock(),
         ];
 
-        $localizer = new Localizer($locales, $detectors);
+        $localizer = new Localizer($supportedLocales, $detectors);
 
         $this->assertFalse($localizer->detect());
     }

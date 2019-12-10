@@ -8,10 +8,6 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends  BaseTestCase
 {
-    protected $localesKey;
-    protected $sessionKey;
-    protected $cookieName;
-
     /**
      * Setup the test environment.
      *
@@ -20,10 +16,6 @@ abstract class TestCase extends  BaseTestCase
     protected function setUp()
     {
         parent::setUp();
-
-        $this->localesKey = 'localizer.supported-locales';
-        $this->sessionKey = Config::get('localizer.session-key');
-        $this->cookieName = Config::get('localizer.cookie-name');
 
         Config::set('app.key', str_random(32));
     }

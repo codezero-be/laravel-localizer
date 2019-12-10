@@ -5,7 +5,6 @@ namespace CodeZero\Localizer\Tests\Feature;
 use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\Localizer\Middleware\SetLocale;
 use CodeZero\Localizer\Tests\TestCase;
-use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
@@ -14,137 +13,162 @@ use Illuminate\Support\Facades\Session;
 
 class SetLocaleTest extends TestCase
 {
+    protected $sessionKey;
+    protected $cookieName;
+
+    /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
     protected function setUp()
     {
         parent::setUp();
 
-        TestResponse::macro('assertAppLocale', function ($locale) {
-            return $this->assertSee('The locale is: ' . $locale);
-        });
-
-        $this->withoutExceptionHandling();
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
+        $this->sessionKey = Config::get('localizer.session-key');
+        $this->cookieName = Config::get('localizer.cookie-name');
     }
 
     /** @test */
     public function it_looks_for_a_locale_in_the_url_first()
     {
-        $this->registerRoute('nl/some/route');
-
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-
         $cookie = [$this->cookieName => Crypt::encrypt('de')];
 
-        $this->call('GET', 'nl/some/route', [], $cookie)
-            ->assertSessionHas($this->sessionKey, 'nl')
-            ->assertCookie($this->cookieName, 'nl')
-            ->assertAppLocale('nl');
+        Route::get('nl/some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->call('GET', 'nl/some/route', [], $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
     }
 
     /** @test */
     public function you_can_configure_which_segment_to_use_as_locale()
     {
-        $this->registerRoute('some/nl/route');
-
-        Config::set('localizer.url-segment', 2);
-
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-
         $cookie = [$this->cookieName => Crypt::encrypt('de')];
 
-        $this->call('GET', 'some/nl/route', [], $cookie)
-            ->assertSessionHas($this->sessionKey, 'nl')
-            ->assertCookie($this->cookieName, 'nl')
-            ->assertAppLocale('nl');
+        Config::set('localizer.url-segment', 2);
+
+        Route::get('some/nl/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->call('GET', 'some/nl/route', [], $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
     }
 
     /** @test */
     public function it_looks_for_a_locale_in_the_session_if_not_found_in_the_url()
     {
-        $this->registerRoute('some/route');
-
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-
         $cookie = [$this->cookieName => Crypt::encrypt('de')];
 
-        $this->call('GET', 'some/route', [], $cookie)
-            ->assertSessionHas($this->sessionKey, 'fr')
-            ->assertCookie($this->cookieName, 'fr')
-            ->assertAppLocale('fr');
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->call('GET', 'some/route', [], $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'fr');
+        $response->assertCookie($this->cookieName, 'fr');
+        $this->assertEquals('fr', $response->original);
     }
 
     /** @test */
     public function it_looks_for_a_locale_in_a_cookie_if_not_found_in_the_url_or_session()
     {
-        $this->registerRoute('some/route');
-
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale(null);
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-
         $cookie = [$this->cookieName => Crypt::encrypt('de')];
 
-        $this->call('GET', 'some/route', [], $cookie)
-            ->assertSessionHas($this->sessionKey, 'de')
-            ->assertCookie($this->cookieName, 'de')
-            ->assertAppLocale('de');
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->call('GET', 'some/route', [], $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'de');
+        $response->assertCookie($this->cookieName, 'de');
+        $this->assertEquals('de', $response->original);
     }
 
     /** @test */
     public function it_looks_for_a_locale_in_the_browser_if_not_found_in_the_url_or_session_or_cookie()
     {
-        $this->registerRoute('some/route');
-
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale(null);
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-
         $cookie = [];
 
-        $this->call('GET', 'some/route', [], $cookie)
-            ->assertSessionHas($this->sessionKey, 'it')
-            ->assertCookie($this->cookieName, 'it')
-            ->assertAppLocale('it');
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->call('GET', 'some/route', [], $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'it');
+        $response->assertCookie($this->cookieName, 'it');
+        $this->assertEquals('it', $response->original);
     }
 
     /** @test */
     public function it_returns_the_best_match_when_a_browser_locale_is_used()
     {
-        $this->registerRoute('some/route');
-
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale(null);
-        $this->setBrowserLocales('cs,it-IT;q=0.8,es;q=0.4');
+        $this->setBrowserLocales('cs,it-IT;q=0.4,es;q=0.8');
         $this->setAppLocale('en');
-
         $cookie = [];
 
-        $this->call('GET', 'some/route', [], $cookie)
-            ->assertSessionHas($this->sessionKey, 'it')
-            ->assertCookie($this->cookieName, 'it')
-            ->assertAppLocale('it');
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->call('GET', 'some/route', [], $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'es');
+        $response->assertCookie($this->cookieName, 'es');
+        $this->assertEquals('es', $response->original);
     }
 
     /** @test */
     public function it_defaults_to_the_current_app_locale()
     {
-        $this->registerRoute('some/route');
-
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale(null);
         $this->setBrowserLocales(null);
         $this->setAppLocale('en');
-
         $cookie = [];
 
-        $this->call('GET', 'some/route', [], $cookie)
-            ->assertSessionHas($this->sessionKey, 'en')
-            ->assertCookie($this->cookieName, 'en')
-            ->assertAppLocale('en');
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->call('GET', 'some/route', [], $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'en');
+        $response->assertCookie($this->cookieName, 'en');
+        $this->assertEquals('en', $response->original);
     }
 
     /**
@@ -170,7 +194,7 @@ class SetLocaleTest extends TestCase
      */
     protected function setSupportedLocales(array $locales)
     {
-        Config::set($this->localesKey, $locales);
+        Config::set('localizer.supported-locales', $locales);
 
         return $this;
     }
@@ -201,24 +225,6 @@ class SetLocaleTest extends TestCase
         App::bind(BrowserLocale::class, function () use ($locales) {
             return new BrowserLocale($locales);
         });
-
-        return $this;
-    }
-
-    /**
-     * Register a route.
-     *
-     * @param string $url
-     *
-     * @return $this
-     */
-    protected function registerRoute($url)
-    {
-        Route::getRoutes()->add(
-            Route::get($url, function () {
-                return 'The locale is: ' . App::getLocale();
-            })->middleware(['web', SetLocale::class])
-        );
 
         return $this;
     }
