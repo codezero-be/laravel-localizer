@@ -2,15 +2,15 @@
 
 namespace CodeZero\Localizer\Tests\Feature;
 
-use App;
+use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\Localizer\Middleware\SetLocale;
 use CodeZero\Localizer\Tests\TestCase;
-use CodeZero\BrowserLocale\BrowserLocale;
-use Config;
-use Crypt;
 use Illuminate\Foundation\Testing\TestResponse;
-use Route;
-use Session;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 class SetLocaleTest extends TestCase
 {

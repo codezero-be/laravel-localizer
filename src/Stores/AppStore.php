@@ -2,7 +2,7 @@
 
 namespace CodeZero\Localizer\Stores;
 
-use App;
+use Illuminate\Support\Facades\App;
 
 class AppStore implements Store
 {

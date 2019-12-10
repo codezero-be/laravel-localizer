@@ -2,7 +2,7 @@
 
 namespace CodeZero\Localizer;
 
-use App;
+use Illuminate\Support\Facades\App;
 
 class Localizer
 {

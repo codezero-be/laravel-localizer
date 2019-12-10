@@ -2,7 +2,7 @@
 
 namespace CodeZero\Localizer\Detectors;
 
-use App;
+use Illuminate\Support\Facades\App;
 
 class AppDetector implements Detector
 {

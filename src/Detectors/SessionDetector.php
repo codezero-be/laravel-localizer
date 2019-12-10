@@ -2,8 +2,8 @@
 
 namespace CodeZero\Localizer\Detectors;
 
-use Config;
-use Session;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Session;
 
 class SessionDetector implements Detector
 {

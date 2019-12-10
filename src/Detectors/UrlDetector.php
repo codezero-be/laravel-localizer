@@ -2,8 +2,8 @@
 
 namespace CodeZero\Localizer\Detectors;
 
-use Config;
-use Request;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
 
 class UrlDetector implements Detector
 {

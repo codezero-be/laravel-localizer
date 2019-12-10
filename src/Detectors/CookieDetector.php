@@ -2,8 +2,8 @@
 
 namespace CodeZero\Localizer\Detectors;
 
-use Config;
-use Cookie;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Cookie;
 
 class CookieDetector implements Detector
 {

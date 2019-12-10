@@ -3,7 +3,7 @@
 namespace CodeZero\Localizer\Tests;
 
 use CodeZero\Localizer\LocalizerServiceProvider;
-use Config;
+use Illuminate\Support\Facades\Config;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends  BaseTestCase

@@ -2,9 +2,9 @@
 
 namespace CodeZero\Localizer\Detectors;
 
-use App;
 use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\BrowserLocale\Filters\CombinedFilter;
+use Illuminate\Support\Facades\App;
 
 class BrowserDetector implements Detector
 {
