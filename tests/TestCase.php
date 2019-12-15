@@ -4,6 +4,7 @@ namespace CodeZero\Localizer\Tests;
 
 use CodeZero\Localizer\LocalizerServiceProvider;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 
 abstract class TestCase extends  BaseTestCase
@@ -13,11 +14,11 @@ abstract class TestCase extends  BaseTestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        Config::set('app.key', str_random(32));
+        Config::set('app.key', Str::random(32));
     }
 
     /**
