@@ -36,7 +36,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de')];
+        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
 
         Route::get('nl/some/route', function () {
             return App::getLocale();
@@ -56,7 +56,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de')];
+        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
 
         Config::set('localizer.url-segment', 2);
 
@@ -78,7 +78,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de')];
+        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
 
         Route::get('some/route', function () {
             return App::getLocale();
@@ -98,7 +98,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de')];
+        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
 
         Route::get('some/route', function () {
             return App::getLocale();
