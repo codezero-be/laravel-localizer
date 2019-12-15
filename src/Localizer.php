@@ -76,6 +76,20 @@ class Localizer
     }
 
     /**
+     * Set the supported locales.
+     *
+     * @param array $locales
+     *
+     * @return \CodeZero\Localizer\Localizer
+     */
+    public function setSupportedLocales(array $locales)
+    {
+        $this->locales = $locales;
+
+        return $this;
+    }
+
+    /**
      * Check if the given locale is supported.
      *
      * @param mixed $locale

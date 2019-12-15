@@ -99,4 +99,20 @@ class LocalizerTest extends TestCase
         $localizer->detect();
         $localizer->store('nl');
     }
+
+    /** @test */
+    public function you_can_set_the_supported_locales_at_runtime()
+    {
+        $supportedLocales = ['en'];
+        $detectors = [
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns('en')->getMock(),
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns('nl')->getMock(),
+        ];
+
+        $localizer = new Localizer($supportedLocales, $detectors);
+        $value = $localizer->setSupportedLocales(['nl']);
+
+        $this->assertEquals('nl', $localizer->detect());
+        $this->assertEquals($localizer, $value);
+    }
 }
