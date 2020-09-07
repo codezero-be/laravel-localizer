@@ -2,6 +2,10 @@
 
 All Notable changes to **Laravel Localizer** will be documented in this file.
 
+## 1.3.0 (2020-09-07)
+
+- Add support for Laravel 8
+
 ## 1.2.0 (2020-03-03)
 
 - Add support for Laravel 7
