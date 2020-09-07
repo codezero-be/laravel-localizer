@@ -36,13 +36,13 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
+        $cookie = 'de';
 
         Route::get('nl/some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->call('GET', 'nl/some/route', [], $cookie);
+        $response = $this->getWithCookie('nl/some/route', $cookie);
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -56,7 +56,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
+        $cookie = 'de';
 
         Config::set('localizer.url-segment', 2);
 
@@ -64,7 +64,7 @@ class SetLocaleTest extends TestCase
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->call('GET', 'some/nl/route', [], $cookie);
+        $response = $this->getWithCookie('some/nl/route', $cookie);
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -78,13 +78,13 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
+        $cookie = 'de';
 
         Route::get('some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->call('GET', 'some/route', [], $cookie);
+        $response = $this->getWithCookie('some/route', $cookie);
 
         $response->assertSessionHas($this->sessionKey, 'fr');
         $response->assertCookie($this->cookieName, 'fr');
@@ -98,13 +98,13 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [$this->cookieName => Crypt::encrypt('de', false)];
+        $cookie = 'de';
 
         Route::get('some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->call('GET', 'some/route', [], $cookie);
+        $response = $this->getWithCookie('some/route', $cookie);
 
         $response->assertSessionHas($this->sessionKey, 'de');
         $response->assertCookie($this->cookieName, 'de');
@@ -118,13 +118,12 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
-        $cookie = [];
 
         Route::get('some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->call('GET', 'some/route', [], $cookie);
+        $response = $this->get('some/route');
 
         $response->assertSessionHas($this->sessionKey, 'it');
         $response->assertCookie($this->cookieName, 'it');
@@ -138,13 +137,12 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales('cs,it-IT;q=0.4,es;q=0.8');
         $this->setAppLocale('en');
-        $cookie = [];
 
         Route::get('some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->call('GET', 'some/route', [], $cookie);
+        $response = $this->get('some/route');
 
         $response->assertSessionHas($this->sessionKey, 'es');
         $response->assertCookie($this->cookieName, 'es');
@@ -158,13 +156,12 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales(null);
         $this->setAppLocale('en');
-        $cookie = [];
 
         Route::get('some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->call('GET', 'some/route', [], $cookie);
+        $response = $this->get('some/route');
 
         $response->assertSessionHas($this->sessionKey, 'en');
         $response->assertCookie($this->cookieName, 'en');
@@ -227,5 +224,20 @@ class SetLocaleTest extends TestCase
         });
 
         return $this;
+    }
+
+    /**
+     * Perform a GET request when the given cookie was previously set.
+     *
+     * @param string $url
+     * @param string $cookie
+     *
+     * @return \Illuminate\Testing\TestResponse
+     */
+    protected function getWithCookie($url, $cookie)
+    {
+        return App::version() < 6
+            ? $this->call('GET', $url, [], [$this->cookieName => Crypt::encrypt($cookie, false)])
+            : $this->withCookie($this->cookieName, $cookie)->get($url);
     }
 }
