@@ -1,17 +1,16 @@
-name: Tests
+name: run-tests
 
 on: [ push, pull_request ]
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
-        os: [ ubuntu-latest ]
         php: [ 7.1, 7.2, 7.3, 7.4, 8.0 ]
         laravel: [ 5.6.*, 5.7.*, 5.8.*, 6.*, 7.*, 8.* ]
-        dependency-version: [ prefer-stable ]
+        dependency-version: [ prefer-lowest, prefer-stable ]
         include:
           - laravel: 5.6.*
             testbench: 3.6.*
@@ -41,7 +40,7 @@ jobs:
           - laravel: 5.6.*
             php: 8.0
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
+    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }}
 
     steps:
       - name: Checkout code
@@ -58,7 +57,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
-          coverage: xdebug
+          coverage: none
 
       - name: Install dependencies
         run: |
@@ -66,11 +65,4 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Execute tests
-        run: vendor/bin/phpunit --coverage-clover=coverage.xml
-
-      - if: github.event_name == 'push'
-        name: Run Codacy Coverage Reporter
-        uses: codacy/codacy-coverage-reporter-action@master
-        with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage.xml
+        run: vendor/bin/phpunit
