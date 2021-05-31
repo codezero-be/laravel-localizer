@@ -49,7 +49,7 @@ class Localizer
     public function detect()
     {
         foreach ($this->detectors as $detector) {
-            $locales = (array) $this->getInstance($detector)->detect();
+            $locales = (array)$this->getInstance($detector)->detect();
 
             foreach ($locales as $locale) {
                 if ($this->isSupportedLocale($locale)) {

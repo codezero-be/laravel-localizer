@@ -5,6 +5,7 @@ namespace CodeZero\Localizer\Tests\Feature;
 use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\Localizer\Middleware\SetLocale;
 use CodeZero\Localizer\Tests\TestCase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
@@ -36,6 +37,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
+        $this->setCarbonLocale('es');
         $cookie = 'de';
 
         Route::get('nl/some/route', function () {
@@ -56,6 +58,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
+        $this->setCarbonLocale('es');
         $cookie = 'de';
 
         Config::set('localizer.url-segment', 2);
@@ -78,6 +81,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale('fr');
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
+        $this->setCarbonLocale('es');
         $cookie = 'de';
 
         Route::get('some/route', function () {
@@ -98,6 +102,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
+        $this->setCarbonLocale('es');
         $cookie = 'de';
 
         Route::get('some/route', function () {
@@ -118,6 +123,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales('it');
         $this->setAppLocale('en');
+        $this->setCarbonLocale('es');
 
         Route::get('some/route', function () {
             return App::getLocale();
@@ -137,6 +143,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales('cs,it-IT;q=0.4,es;q=0.8');
         $this->setAppLocale('en');
+        $this->setCarbonLocale('es');
 
         Route::get('some/route', function () {
             return App::getLocale();
@@ -156,6 +163,7 @@ class SetLocaleTest extends TestCase
         $this->setSessionLocale(null);
         $this->setBrowserLocales(null);
         $this->setAppLocale('en');
+        $this->setCarbonLocale('es');
 
         Route::get('some/route', function () {
             return App::getLocale();
@@ -178,6 +186,20 @@ class SetLocaleTest extends TestCase
     protected function setAppLocale($locale)
     {
         App::setLocale($locale);
+
+        return $this;
+    }
+
+    /**
+     * Set the current carbon locale.
+     *
+     * @param string $locale
+     *
+     * @return $this
+     */
+    protected function setCarbonLocale($locale)
+    {
+        Carbon::setLocale($locale);
 
         return $this;
     }
