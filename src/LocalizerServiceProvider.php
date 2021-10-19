@@ -2,6 +2,7 @@
 
 namespace CodeZero\Localizer;
 
+use CodeZero\BrowserLocale\Laravel\BrowserLocaleServiceProvider;
 use Illuminate\Support\ServiceProvider;
 
 class LocalizerServiceProvider extends ServiceProvider
@@ -32,6 +33,7 @@ class LocalizerServiceProvider extends ServiceProvider
     {
         $this->mergeConfig();
         $this->registerLocalizer();
+        $this->registerProviders();
     }
 
     /**
@@ -71,5 +73,15 @@ class LocalizerServiceProvider extends ServiceProvider
 
             return new Localizer($locales, $detectors, $stores);
         });
+    }
+
+    /**
+     * Registers the package dependencies
+     *
+     * @return void
+     */
+    protected function registerProviders()
+    {
+        $this->app->register(BrowserLocaleServiceProvider::class);
     }
 }
