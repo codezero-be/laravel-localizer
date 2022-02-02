@@ -1,11 +1,14 @@
 # Laravel Localizer
 
-[![GitHub release](https://img.shields.io/github/release/codezero-be/laravel-localizer.svg)]()
-[![License](https://img.shields.io/packagist/l/codezero/laravel-localizer.svg)]()
-[![Build Status](https://scrutinizer-ci.com/g/codezero-be/laravel-localizer/badges/build.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/laravel-localizer/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/codezero-be/laravel-localizer/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/laravel-localizer/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/codezero-be/laravel-localizer/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/codezero-be/laravel-localizer/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/codezero/laravel-localizer.svg)](https://packagist.org/packages/codezero/laravel-localizer)
+[![GitHub release](https://img.shields.io/github/release/codezero-be/laravel-localizer.svg?style=flat-square)](CHANGELOG.md)
+[![Laravel](https://img.shields.io/badge/laravel-8-red?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![License](https://img.shields.io/packagist/l/codezero/laravel-localizer.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/github/workflow/status/codezero-be/laravel-localizer/Tests/master?style=flat-square&logo=github&logoColor=white&label=tests)](https://github.com/codezero-be/laravel-localizer/actions)
+[![Code Coverage](https://img.shields.io/codacy/coverage/ad6fcea152b449d380a187a375d0f7d7/master?style=flat-square)](https://app.codacy.com/gh/codezero-be/laravel-localizer)
+[![Code Quality](https://img.shields.io/codacy/grade/ad6fcea152b449d380a187a375d0f7d7/master?style=flat-square)](https://app.codacy.com/gh/codezero-be/laravel-localizer)
+[![Total Downloads](https://img.shields.io/packagist/dt/codezero/laravel-localizer.svg?style=flat-square)](https://packagist.org/packages/codezero/laravel-localizer)
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R3UQ8V)
 
 #### Automatically detect and set an app locale that matches your visitor's preference.
 
