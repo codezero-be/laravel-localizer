@@ -236,7 +236,7 @@ class SetLocaleTest extends TestCase
      */
     protected function getWithCookie($url, $cookie)
     {
-        return App::version() < 6
+        return version_compare(App::version(), '6.0.0') === -1
             ? $this->call('GET', $url, [], [$this->cookieName => Crypt::encrypt($cookie, false)])
             : $this->withCookie($this->cookieName, $cookie)->get($url);
     }
