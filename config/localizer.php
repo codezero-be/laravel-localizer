@@ -35,6 +35,12 @@ return [
     'url-segment' => 1,
 
     /**
+     * The attribute on the user model that holds the locale,
+     * when using the UserDetector.
+     */
+    'user-attribute' => 'locale',
+
+    /**
      * The session key that holds the locale,
      * when using the SessionDetector and SessionStore.
      */
