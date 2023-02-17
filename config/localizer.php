@@ -13,6 +13,7 @@ return [
      */
     'detectors' => [
         CodeZero\Localizer\Detectors\UrlDetector::class,
+        CodeZero\Localizer\Detectors\UserDetector::class,
         CodeZero\Localizer\Detectors\SessionDetector::class,
         CodeZero\Localizer\Detectors\CookieDetector::class,
         CodeZero\Localizer\Detectors\BrowserDetector::class,
