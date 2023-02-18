@@ -13,6 +13,7 @@ return [
      */
     'detectors' => [
         CodeZero\Localizer\Detectors\UrlDetector::class,
+        CodeZero\Localizer\Detectors\UserDetector::class,
         CodeZero\Localizer\Detectors\SessionDetector::class,
         CodeZero\Localizer\Detectors\CookieDetector::class,
         CodeZero\Localizer\Detectors\BrowserDetector::class,
@@ -33,6 +34,12 @@ return [
      * when using the UrlDetector.
      */
     'url-segment' => 1,
+
+    /**
+     * The attribute on the user model that holds the locale,
+     * when using the UserDetector.
+     */
+    'user-attribute' => 'locale',
 
     /**
      * The session key that holds the locale,
