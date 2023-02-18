@@ -21,6 +21,6 @@ class UserDetector implements Detector
             return null;
         }
 
-        return $user->{$attribute};
+        return $user->getAttributeValue($attribute);
     }
 }
