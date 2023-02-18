@@ -14,12 +14,13 @@ class UserDetector implements Detector
      */
     public function detect()
     {
-        $attribute = Config::get('localizer.user-attribute');
         $user = Auth::user();
 
         if ($user === null) {
             return null;
         }
+
+        $attribute = Config::get('localizer.user-attribute');
 
         return $user->getAttributeValue($attribute);
     }
