@@ -100,10 +100,10 @@ By default this is all set to `locale`. If the user model does not have this att
 You can also choose which detectors to run and in what order.
 
 > You can create your own detector by implementing the `\CodeZero\Localizer\Detectors\Detector` interface
-and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container,
-so you can add any dependencies to your constructor.
+> and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container,
+> so you can add any dependencies to your constructor.
 
-###  Configure Stores
+### Configure Stores
 
 The first supported locale that is returned by a detector will automatically be stored in:
 
@@ -114,8 +114,8 @@ The first supported locale that is returned by a detector will automatically be 
 In the configuration file, you can choose which stores to use.
 
 > You can create your own store by implementing the `\CodeZero\Localizer\Stores\Store` interface 
-and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, 
-so you can add any dependencies to your constructor.
+> and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, 
+> so you can add any dependencies to your constructor.
 
 ## Testing
 
