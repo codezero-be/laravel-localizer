@@ -1,20 +1,5 @@
 # Laravel Localizer
 
-## IMPORTANT: March 2022
-
-[![Support Ukraine](https://raw.githubusercontent.com/hampusborgos/country-flags/main/png100px/ua.png)](https://github.com/hampusborgos/country-flags/blob/main/png100px/ua.png)
-
-It's horrible to see what is happening now in Ukraine, as Russian army is
-[bombarding houses, hospitals and kindergartens](https://twitter.com/DavidCornDC/status/1501620037785997316).
-
-Please [check out supportukrainenow.org](https://supportukrainenow.org/) for the ways how you can help people there.
-Spread the word.
-
-And if you are from Russia and you are against this war, please express your protest in some way.
-I know you can get punished for this, but you are one of the hopes of those innocent people.
-
----
-
 [![GitHub release](https://img.shields.io/github/release/codezero-be/laravel-localizer.svg?style=flat-square)](https://github.com/codezero-be/laravel-localizer/releases)
 [![Laravel](https://img.shields.io/badge/laravel-10-red?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
 [![License](https://img.shields.io/packagist/l/codezero/laravel-localizer.svg?style=flat-square)](LICENSE.md)
@@ -25,7 +10,7 @@ I know you can get punished for this, but you are one of the hopes of those inno
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/R6R3UQ8V)
 
-#### Automatically detect and set an app locale that matches your visitor's preference.
+Automatically detect and set an app locale that matches your visitor's preference.
 
 - Define your supported locales and match your visitor's preference
 - Uses the most common locale [detectors](#detectors) by default
@@ -39,15 +24,19 @@ I know you can get punished for this, but you are one of the hopes of those inno
 
 ## Install
 
+Install this package with Composer:
+
 ```bash
 composer require codezero/laravel-localizer
 ```
 
 Laravel will automatically register the ServiceProvider.
 
-#### Add Middleware
+## Add Middleware
 
-Add the middleware to the `web` middleware group in `app/Http/Kernel.php`, after `StartSession` and before `SubstituteBindings`:
+Add the middleware to the `web` middleware group in `app/Http/Kernel.php`.
+
+Make sure to add it after `StartSession` and before `SubstituteBindings`:
 
 ```php
 protected $middlewareGroups = [
@@ -61,7 +50,11 @@ protected $middlewareGroups = [
 ];
 ```
 
-In Laravel 6.x you also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php` to trigger it in the correct order:
+In Laravel 6.x and higher, you also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php`
+to trigger it in the correct order.
+
+If you don't see the `$middlewarePriority` array in your kernel file, 
+then you can copy it over from the parent class `Illuminate\Foundation\Http\Kernel`.
 
 ```php
 protected $middlewarePriority = [
@@ -73,7 +66,7 @@ protected $middlewarePriority = [
 ];
 ```
 
-#### Publish Configuration File
+## Publish Configuration File
 
 ```bash
 php artisan vendor:publish --provider="CodeZero\Localizer\LocalizerServiceProvider" --tag="config"
@@ -81,7 +74,7 @@ php artisan vendor:publish --provider="CodeZero\Localizer\LocalizerServiceProvid
 
 You will now find a `localizer.php` file in the `config` folder.
 
-#### Configure Supported Locales
+## Configure
 
 Add any locales you wish to support to your published `config/localizer.php` file:
 
@@ -89,37 +82,43 @@ Add any locales you wish to support to your published `config/localizer.php` fil
 'supported-locales' => ['en', 'nl', 'fr'];
 ```
 
-## Drivers
+### Configure Detectors
 
-#### Detectors
-
-By default the middleware will use the following detectors to check for a supported locale in:
+By default, the middleware will use the following detectors to check for a supported locale in:
 
 1. The URL slug
+2. The authenticated user model
 2. The session
 3. A cookie
 4. The browser
 5. The app's default locale
 
-If you publish the configuration file, you can choose which detectors to run and in what order.
+You can configure the session key, cookie name and the attribute on the user model that holds the locale.
+By default this is all set to `locale`. If the user model does not have this attribute, it will skip this check.
 
-You can also create your own detector by implementing the `\CodeZero\Localizer\Detectors\Detector` interface and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container, so you can add any dependencies to your constructor.
+You can also choose which detectors to run and in what order.
 
-####  Stores
+You can also create your own detector by implementing the `\CodeZero\Localizer\Detectors\Detector` interface
+and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container,
+so you can add any dependencies to your constructor.
 
-The first supported locale that is returned by a detector will then be stored in:
+###  Configure Stores
+
+The first supported locale that is returned by a detector will automatically be stored in:
 
 - The session
 - A cookie
 - The app locale
 
-If you publish the configuration file, you can choose which stores to use.
+In the configuration file, you can choose which stores to use.
 
-You can also create your own store by implementing the `\CodeZero\Localizer\Stores\Store` interface and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, so you can add any dependencies to your constructor.
+You can also create your own store by implementing the `\CodeZero\Localizer\Stores\Store` interface 
+and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, 
+so you can add any dependencies to your constructor.
 
 ## Testing
 
-```
+```bash
 composer test
 ```
 
