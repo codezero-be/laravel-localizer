@@ -35,7 +35,6 @@ Laravel will automatically register the ServiceProvider.
 ## Add Middleware
 
 Add the middleware to the `web` middleware group in `app/Http/Kernel.php`.
-
 Make sure to add it after `StartSession` and before `SubstituteBindings`:
 
 ```php
@@ -51,10 +50,7 @@ protected $middlewareGroups = [
 ```
 
 In Laravel 6.x and higher, you also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php`
-to trigger it in the correct order.
-
-If you don't see the `$middlewarePriority` array in your kernel file, 
-then you can copy it over from the parent class `Illuminate\Foundation\Http\Kernel`.
+to trigger it in the correct order:
 
 ```php
 protected $middlewarePriority = [
@@ -66,15 +62,18 @@ protected $middlewarePriority = [
 ];
 ```
 
-## Publish Configuration File
+If you don't see the `$middlewarePriority` array in your kernel file,
+then you can copy it over from the parent class `Illuminate\Foundation\Http\Kernel`.
+
+## Configure
+
+### Publish Configuration File
 
 ```bash
 php artisan vendor:publish --provider="CodeZero\Localizer\LocalizerServiceProvider" --tag="config"
 ```
 
 You will now find a `localizer.php` file in the `config` folder.
-
-## Configure
 
 Add any locales you wish to support to your published `config/localizer.php` file:
 
