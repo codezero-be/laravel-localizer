@@ -75,6 +75,8 @@ php artisan vendor:publish --provider="CodeZero\Localizer\LocalizerServiceProvid
 
 You will now find a `localizer.php` file in the `config` folder.
 
+### Configure Supported Locales
+
 Add any locales you wish to support to your published `config/localizer.php` file:
 
 ```php
