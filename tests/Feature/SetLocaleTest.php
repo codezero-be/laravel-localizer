@@ -32,7 +32,31 @@ class SetLocaleTest extends TestCase
     }
 
     /** @test */
-    public function it_looks_for_a_locale_in_the_url_first()
+    public function it_looks_for_a_locale_in_a_custom_route_action()
+    {
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
+        $this->setSessionLocale('fr');
+        $this->setBrowserLocales('it');
+        $this->setAppLocale('en');
+        $cookie = 'de';
+
+        Route::group([
+            'locale' => 'nl',
+        ], function () {
+            Route::get('some/route', function () {
+                return App::getLocale();
+            })->middleware(['web', SetLocale::class]);
+        });
+
+        $response = $this->getWithCookie('some/route', $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function it_looks_for_a_locale_in_the_url()
     {
         $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
         $this->setSessionLocale('fr');

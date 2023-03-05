@@ -87,18 +87,22 @@ Add any locales you wish to support to your published `config/localizer.php` fil
 
 By default, the middleware will use the following detectors to check for a supported locale in:
 
-1. The URL slug
-2. A main omitted locale
-3. The authenticated user model
-4. The session
-5. A cookie
-6. The browser
-7. The app's default locale
+1. A custom route action
+2. The URL slug
+3. A main omitted locale
+4. The authenticated user model
+5. The session
+6. A cookie
+7. The browser
+8. The app's default locale
+
+You can set a custom attribute or "action" on a route group.
+This is especially useful in combination with the [codezero/laravel-localized-routes](https://github.com/codezero-be/laravel-localized-routes) package.
 
 If you set an omitted locale, no additional detectors will run after the `OmittedLocaleDetector`.
 This makes sense, because the locale will always be determined by the URL in this scenario.
 
-You can configure the session key, cookie name and the attribute on the user model that holds the locale.
+You can configure the route action, session key, cookie name and the attribute on the user model that holds the locale.
 By default this is all set to `locale`. If the user model does not have this attribute, it will skip this check.
 
 You can also choose which detectors to run and in what order.
