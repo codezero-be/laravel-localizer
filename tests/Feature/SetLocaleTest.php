@@ -5,6 +5,8 @@ namespace CodeZero\Localizer\Tests\Feature;
 use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\Localizer\Middleware\SetLocale;
 use CodeZero\Localizer\Tests\TestCase;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Crypt;
@@ -69,6 +71,58 @@ class SetLocaleTest extends TestCase
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
         $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function it_looks_for_a_locale_on_the_authenticated_user_if_not_found_in_the_url()
+    {
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
+        $this->setSessionLocale('fr');
+        $this->setBrowserLocales('it');
+        $this->setAppLocale('en');
+        $cookie = 'de';
+
+        $attribute = Config::get('localizer.user-attribute');
+        $user = new User();
+        $user->$attribute = 'nl';
+
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->actingAs($user)->getWithCookie('some/route', $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function it_will_bypass_missing_attribute_exception_if_the_locale_attribute_is_missing_on_the_user_model()
+    {
+        if (version_compare(App::version(), '9.35.0') === -1) {
+            $this->markTestSkipped('This test only applies to Laravel 9 and higher.');
+        }
+
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
+        $this->setSessionLocale('fr');
+        $this->setBrowserLocales('it');
+        $this->setAppLocale('en');
+        $cookie = 'de';
+
+        $user = new User();
+        $user->exists = true;
+        Model::preventAccessingMissingAttributes();
+
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->actingAs($user)->getWithCookie('some/route', $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'fr');
+        $response->assertCookie($this->cookieName, 'fr');
+        $this->assertEquals('fr', $response->original);
     }
 
     /** @test */
