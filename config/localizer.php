@@ -8,11 +8,20 @@ return [
     'supported-locales' => [],
 
     /**
+     * If your main locale is omitted from the URL, set it here.
+     * It will always be used if no supported locale is found in the URL.
+     * Note that no other detectors will run after the OmittedLocaleDetector!
+     * Setting this option to `null` will disable this detector.
+     */
+    'omitted-locale' => null,
+
+    /**
      * The detectors to use to find a matching locale.
      * These will be executed in the order that they are added to the array!
      */
     'detectors' => [
         CodeZero\Localizer\Detectors\UrlDetector::class,
+        CodeZero\Localizer\Detectors\OmittedLocaleDetector::class,
         CodeZero\Localizer\Detectors\UserDetector::class,
         CodeZero\Localizer\Detectors\SessionDetector::class,
         CodeZero\Localizer\Detectors\CookieDetector::class,

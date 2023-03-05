@@ -88,11 +88,15 @@ Add any locales you wish to support to your published `config/localizer.php` fil
 By default, the middleware will use the following detectors to check for a supported locale in:
 
 1. The URL slug
-2. The authenticated user model
-3. The session
-4. A cookie
-5. The browser
-6. The app's default locale
+2. A main omitted locale
+3. The authenticated user model
+4. The session
+5. A cookie
+6. The browser
+7. The app's default locale
+
+If you set an omitted locale, no additional detectors will run after the `OmittedLocaleDetector`.
+This makes sense, because the locale will always be determined by the URL in this scenario.
 
 You can configure the session key, cookie name and the attribute on the user model that holds the locale.
 By default this is all set to `locale`. If the user model does not have this attribute, it will skip this check.
