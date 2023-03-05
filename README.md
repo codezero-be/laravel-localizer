@@ -89,10 +89,10 @@ By default, the middleware will use the following detectors to check for a suppo
 
 1. The URL slug
 2. The authenticated user model
-2. The session
-3. A cookie
-4. The browser
-5. The app's default locale
+3. The session
+4. A cookie
+5. The browser
+6. The app's default locale
 
 You can configure the session key, cookie name and the attribute on the user model that holds the locale.
 By default this is all set to `locale`. If the user model does not have this attribute, it will skip this check.
