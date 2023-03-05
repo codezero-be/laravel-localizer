@@ -20,6 +20,7 @@ return [
      * These will be executed in the order that they are added to the array!
      */
     'detectors' => [
+        CodeZero\Localizer\Detectors\RouteActionDetector::class,
         CodeZero\Localizer\Detectors\UrlDetector::class,
         CodeZero\Localizer\Detectors\OmittedLocaleDetector::class,
         CodeZero\Localizer\Detectors\UserDetector::class,
@@ -43,6 +44,12 @@ return [
      * when using the UrlDetector.
      */
     'url-segment' => 1,
+
+    /**
+     * The attribute or "action" on the route that holds the locale,
+     * when using the RouteActionDetector.
+     */
+    'route-action' => 'locale',
 
     /**
      * The attribute on the user model that holds the locale,
