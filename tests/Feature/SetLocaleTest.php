@@ -74,6 +74,27 @@ class SetLocaleTest extends TestCase
     }
 
     /** @test */
+    public function it_checks_for_a_configured_omitted_locale()
+    {
+        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
+        $this->setOmittedLocale('nl');
+        $this->setSessionLocale('fr');
+        $this->setBrowserLocales('it');
+        $this->setAppLocale('en');
+        $cookie = 'de';
+
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->getWithCookie('some/route', $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
     public function it_looks_for_a_locale_on_the_authenticated_user_if_not_found_in_the_url()
     {
         $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
@@ -246,6 +267,20 @@ class SetLocaleTest extends TestCase
     protected function setSupportedLocales(array $locales)
     {
         Config::set('localizer.supported-locales', $locales);
+
+        return $this;
+    }
+
+    /**
+     * Set the omitted locale.
+     *
+     * @param string $locale
+     *
+     * @return $this
+     */
+    protected function setOmittedLocale($locale)
+    {
+        Config::set('localizer.omitted-locale', $locale);
 
         return $this;
     }
