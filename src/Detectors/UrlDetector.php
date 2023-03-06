@@ -25,7 +25,7 @@ class UrlDetector implements Detector
         }
 
         // Find the locale that belongs to the custom domain or slug.
-        $domain = Request::host();
+        $domain = Request::getHttpHost();
         $locales = $this->flipLocalesArray($locales);
         $locale = $locales[$domain] ?? $locales[$slug] ?? null;
 
