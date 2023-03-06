@@ -101,12 +101,12 @@ Or you can use one or more custom domains for a locale:
 ];
 ```
 
-### Configure Detectors
+### Configure Detectors (optional)
 
 By default, the middleware will use the following detectors to check for a supported locale in:
 
 1. A custom route action
-2. The URL slug
+2. The URL (domain or slug)
 3. A main omitted locale
 4. The authenticated user model
 5. The session
@@ -114,7 +114,7 @@ By default, the middleware will use the following detectors to check for a suppo
 7. The browser
 8. The app's default locale
 
-If you set an omitted locale, no additional detectors will run after the `OmittedLocaleDetector`.
+If you configure an omitted locale, no additional detectors will run after the `OmittedLocaleDetector`.
 This makes sense, because the locale will always be determined by the URL in this scenario.
 
 You can configure the route action, session key, cookie name and the attribute on the user model that holds the locale.
@@ -126,7 +126,7 @@ You can also choose which detectors to run and in what order.
 > and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container,
 > so you can add any dependencies to your constructor.
 
-### Configure Stores
+### Configure Stores (optional)
 
 The first supported locale that is returned by a detector will automatically be stored in:
 
