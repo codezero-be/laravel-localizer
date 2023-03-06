@@ -80,7 +80,25 @@ You will now find a `localizer.php` file in the `config` folder.
 Add any locales you wish to support to your published `config/localizer.php` file:
 
 ```php
-'supported-locales' => ['en', 'nl', 'fr'];
+'supported-locales' => ['en', 'nl'];
+```
+
+You can also use one or more custom slugs for a locale:
+
+```php
+'supported-locales' => [
+    'en' => 'english-slug',
+    'nl' => ['dutch-slug', 'nederlandse-slug'],
+];
+```
+
+Or you can use one or more custom domains for a locale:
+
+```php
+'supported-locales' => [
+    'en' => 'english-domain.test',
+    'nl' => ['dutch-domain.test', 'nederlands-domain.test'],
+];
 ```
 
 ### Configure Detectors
@@ -95,9 +113,6 @@ By default, the middleware will use the following detectors to check for a suppo
 6. A cookie
 7. The browser
 8. The app's default locale
-
-You can set a custom attribute or "action" on a route group.
-This is especially useful in combination with the [codezero/laravel-localized-routes](https://github.com/codezero-be/laravel-localized-routes) package.
 
 If you set an omitted locale, no additional detectors will run after the `OmittedLocaleDetector`.
 This makes sense, because the locale will always be determined by the URL in this scenario.

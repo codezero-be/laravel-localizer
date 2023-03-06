@@ -98,6 +98,122 @@ class SetLocaleTest extends TestCase
     }
 
     /** @test */
+    public function it_looks_for_custom_slugs()
+    {
+        $this->setSupportedLocales([
+            'en' => 'english',
+            'nl' => 'dutch',
+            'fr' => 'french',
+        ]);
+        $this->setAppLocale('en');
+
+        Route::get('dutch/some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->get('dutch/some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function you_can_use_multiple_slugs_for_a_locale()
+    {
+        $this->setSupportedLocales([
+            'en' => 'english',
+            'nl' => ['dutch', 'nederlands'],
+            'fr' => 'french',
+        ]);
+        $this->setAppLocale('en');
+
+        Route::get('dutch/some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        Route::get('nederlands/some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->get('dutch/some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+
+        $response = $this->get('nederlands/some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function it_looks_for_custom_domains()
+    {
+        $this->setSupportedLocales([
+            'en' => 'english.test',
+            'nl' => 'dutch.test',
+            'fr' => 'french.test',
+        ]);
+        $this->setAppLocale('en');
+
+        Route::group([
+            'domain' => 'dutch.test',
+        ], function () {
+            Route::get('some/route', function () {
+                return App::getLocale();
+            })->middleware(['web', SetLocale::class]);
+        });
+
+        $response = $this->get('http://dutch.test/some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function you_can_use_multiple_domains_for_a_locale()
+    {
+        $this->setSupportedLocales([
+            'en' => 'english.test',
+            'nl' => ['dutch.test', 'nederlands.test'],
+            'fr' => 'french.test',
+        ]);
+        $this->setAppLocale('en');
+
+        Route::group([
+            'domain' => 'dutch.test',
+        ], function () {
+            Route::get('some/route', function () {
+                return App::getLocale();
+            })->middleware(['web', SetLocale::class]);
+        });
+
+        Route::group([
+            'domain' => 'nederlands.test',
+        ], function () {
+            Route::get('some/route', function () {
+                return App::getLocale();
+            })->middleware(['web', SetLocale::class]);
+        });
+
+        $response = $this->get('http://dutch.test/some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+
+        $response = $this->get('http://nederlands.test/some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
     public function it_checks_for_a_configured_omitted_locale()
     {
         $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
