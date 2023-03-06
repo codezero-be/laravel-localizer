@@ -36,7 +36,7 @@ class Localizer
      */
     public function __construct($locales, $detectors, $stores = [])
     {
-        $this->locales = $locales;
+        $this->setSupportedLocales($locales);
         $this->detectors = $detectors;
         $this->stores = $stores;
     }
@@ -84,6 +84,10 @@ class Localizer
      */
     public function setSupportedLocales(array $locales)
     {
+        if ( ! array_key_exists(0, $locales)) {
+            $locales = array_keys($locales);
+        }
+
         $this->locales = $locales;
 
         return $this;
