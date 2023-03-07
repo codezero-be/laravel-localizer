@@ -14,7 +14,7 @@ class Localizer
     protected $locales;
 
     /**
-     * \CoderZero\Localizer\Detectors\Detector instances.
+     * \CoderZero\Localizer\Detectors\Detector class names or instances.
      *
      * @var \Illuminate\Support\Collection|array
      */
@@ -28,17 +28,26 @@ class Localizer
     protected $stores;
 
     /**
+     * \CoderZero\Localizer\Detectors\Detector class names.
+     *
+     * @var \Illuminate\Support\Collection|array
+     */
+    protected $trustedDetectors;
+
+    /**
      * Create a new Localizer instance.
      *
      * @param \Illuminate\Support\Collection|array $locales
      * @param \Illuminate\Support\Collection|array $detectors
      * @param \Illuminate\Support\Collection|array $stores
+     * @param \Illuminate\Support\Collection|array $trustedDetectors
      */
-    public function __construct($locales, $detectors, $stores = [])
+    public function __construct($locales, $detectors, $stores = [], $trustedDetectors = [])
     {
         $this->setSupportedLocales($locales);
         $this->detectors = $detectors;
         $this->stores = $stores;
+        $this->trustedDetectors = $trustedDetectors;
     }
 
     /**
@@ -52,7 +61,7 @@ class Localizer
             $locales = (array) $this->getInstance($detector)->detect();
 
             foreach ($locales as $locale) {
-                if ($this->isSupportedLocale($locale)) {
+                if ($locale && ($this->isSupportedLocale($locale) || $this->isTrustedDetector($detector))) {
                     return $locale;
                 }
             }
@@ -103,6 +112,28 @@ class Localizer
     protected function isSupportedLocale($locale)
     {
         return in_array($locale, $this->locales);
+    }
+
+    /**
+     * Check if the given Detector class is trusted.
+     *
+     * @param \CodeZero\Localizer\Detectors\Detector|string $detector
+     *
+     * @return bool
+     */
+    protected function isTrustedDetector($detector)
+    {
+        if (is_string($detector)) {
+            return in_array($detector, $this->trustedDetectors);
+        }
+
+        foreach ($this->trustedDetectors as $trustedDetector) {
+            if ($detector instanceof $trustedDetector) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

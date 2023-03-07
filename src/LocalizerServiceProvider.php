@@ -70,8 +70,9 @@ class LocalizerServiceProvider extends ServiceProvider
             $locales = $app['config']->get("{$this->name}.supported-locales");
             $detectors = $app['config']->get("{$this->name}.detectors");
             $stores = $app['config']->get("{$this->name}.stores");
+            $trustedDetectors = $app['config']->get("{$this->name}.trusted-detectors");
 
-            return new Localizer($locales, $detectors, $stores);
+            return new Localizer($locales, $detectors, $stores, $trustedDetectors);
         });
     }
 

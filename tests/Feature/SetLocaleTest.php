@@ -383,6 +383,31 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('en', $response->original);
     }
 
+    /** @test */
+    public function trusted_detectors_ignore_supported_locales_and_may_set_any_locale()
+    {
+        $this->setSupportedLocales(['en']);
+        $this->setAppLocale('en');
+
+        $routeAction = ['locale' => 'nl'];
+
+        Config::set('localizer.trusted-detectors', [
+            \CodeZero\Localizer\Detectors\RouteActionDetector::class,
+        ]);
+
+        Route::group($routeAction, function () {
+            Route::get('some/route', function () {
+                return App::getLocale();
+            })->middleware(['web', SetLocale::class]);
+        });
+
+        $response = $this->get('some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
     /**
      * Set the current app locale.
      *

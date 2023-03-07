@@ -31,6 +31,15 @@ return [
     ],
 
     /**
+     * Add any of the above detector class names here to make it trusted.
+     * When a trusted detector returns a locale, it will be used
+     * as the app locale, regardless if it's a supported locale or not.
+     */
+    'trusted-detectors' => [
+        //
+    ],
+
+    /**
      * The stores to store the first matching locale in.
      */
     'stores' => [
