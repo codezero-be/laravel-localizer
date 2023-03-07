@@ -40,6 +40,42 @@ class LocalizerTest extends TestCase
     }
 
     /** @test */
+    public function trusted_detectors_ignore_supported_locales_and_may_set_any_locale()
+    {
+        $supportedLocales = ['en'];
+        $detectors = [
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns('nl')->getMock(),
+        ];
+        $trustedDetectors = [
+            Detector::class,
+        ];
+
+        $localizer = new Localizer($supportedLocales, $detectors, [], $trustedDetectors);
+
+        $this->assertEquals('nl', $localizer->detect());
+    }
+
+    /** @test */
+    public function empty_locales_from_trusted_detectors_are_ignored()
+    {
+        $supportedLocales = ['en'];
+        $detectors = [
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns(false)->getMock(),
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns(null)->getMock(),
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns([])->getMock(),
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns('')->getMock(),
+            Mockery::mock(Detector::class)->allows()->detect()->andReturns('en')->getMock(),
+        ];
+        $trustedDetectors = [
+            Detector::class,
+        ];
+
+        $localizer = new Localizer($supportedLocales, $detectors, [], $trustedDetectors);
+
+        $this->assertEquals('en', $localizer->detect());
+    }
+
+    /** @test */
     public function it_returns_false_if_no_supported_locale_could_be_detected()
     {
         $supportedLocales = ['en'];
