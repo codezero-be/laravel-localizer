@@ -2,28 +2,11 @@
 
 namespace CodeZero\Localizer\Detectors;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
 
 class RouteActionDetector implements Detector
 {
-    /**
-     * The current request.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
-     * Create a new Detector instance.
-     *
-     * @param \Illuminate\Http\Request $request
-     */
-    public function __construct(Request $request)
-    {
-        $this->request = $request;
-    }
-
     /**
      * Detect the locale.
      *
@@ -33,6 +16,6 @@ class RouteActionDetector implements Detector
     {
         $action = Config::get('localizer.route-action');
 
-        return $this->request->route()->getAction($action);
+        return Request::route()->getAction($action);
     }
 }
