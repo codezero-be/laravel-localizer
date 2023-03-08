@@ -27,6 +27,9 @@ class SetLocaleTest extends TestCase
     {
         parent::setUp();
 
+        // Remove any default browser locales
+        $this->setBrowserLocales(null);
+
         $this->sessionKey = Config::get('localizer.session-key');
         $this->cookieName = Config::get('localizer.cookie-name');
     }
@@ -34,21 +37,18 @@ class SetLocaleTest extends TestCase
     /** @test */
     public function it_looks_for_a_locale_in_a_custom_route_action()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale('fr');
-        $this->setBrowserLocales('it');
+        $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
-        $cookie = 'de';
 
-        Route::group([
-            'locale' => 'nl',
-        ], function () {
+        $routeAction = ['locale' => 'nl'];
+
+        Route::group($routeAction, function () {
             Route::get('some/route', function () {
                 return App::getLocale();
             })->middleware(['web', SetLocale::class]);
         });
 
-        $response = $this->getWithCookie('some/route', $cookie);
+        $response = $this->get('some/route');
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -58,17 +58,14 @@ class SetLocaleTest extends TestCase
     /** @test */
     public function it_looks_for_a_locale_in_the_url()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale('fr');
-        $this->setBrowserLocales('it');
+        $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
-        $cookie = 'de';
 
         Route::get('nl/some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->getWithCookie('nl/some/route', $cookie);
+        $response = $this->get('nl/some/route');
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -78,11 +75,8 @@ class SetLocaleTest extends TestCase
     /** @test */
     public function you_can_configure_which_segment_to_use_as_locale()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale('fr');
-        $this->setBrowserLocales('it');
+        $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
-        $cookie = 'de';
 
         Config::set('localizer.url-segment', 2);
 
@@ -90,7 +84,7 @@ class SetLocaleTest extends TestCase
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->getWithCookie('some/nl/route', $cookie);
+        $response = $this->get('some/nl/route');
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -103,7 +97,6 @@ class SetLocaleTest extends TestCase
         $this->setSupportedLocales([
             'en' => 'english',
             'nl' => 'dutch',
-            'fr' => 'french',
         ]);
         $this->setAppLocale('en');
 
@@ -124,7 +117,6 @@ class SetLocaleTest extends TestCase
         $this->setSupportedLocales([
             'en' => 'english',
             'nl' => ['dutch', 'nederlands'],
-            'fr' => 'french',
         ]);
         $this->setAppLocale('en');
 
@@ -155,13 +147,10 @@ class SetLocaleTest extends TestCase
         $this->setSupportedLocales([
             'en' => 'english.test',
             'nl' => 'dutch.test',
-            'fr' => 'french.test',
         ]);
         $this->setAppLocale('en');
 
-        Route::group([
-            'domain' => 'dutch.test',
-        ], function () {
+        Route::group(['domain' => 'dutch.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
             })->middleware(['web', SetLocale::class]);
@@ -180,21 +169,16 @@ class SetLocaleTest extends TestCase
         $this->setSupportedLocales([
             'en' => 'english.test',
             'nl' => ['dutch.test', 'nederlands.test'],
-            'fr' => 'french.test',
         ]);
         $this->setAppLocale('en');
 
-        Route::group([
-            'domain' => 'dutch.test',
-        ], function () {
+        Route::group(['domain' => 'dutch.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
             })->middleware(['web', SetLocale::class]);
         });
 
-        Route::group([
-            'domain' => 'nederlands.test',
-        ], function () {
+        Route::group(['domain' => 'nederlands.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
             })->middleware(['web', SetLocale::class]);
@@ -216,18 +200,16 @@ class SetLocaleTest extends TestCase
     /** @test */
     public function it_checks_for_a_configured_omitted_locale()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setOmittedLocale('nl');
-        $this->setSessionLocale('fr');
-        $this->setBrowserLocales('it');
+        $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
-        $cookie = 'de';
+
+        $this->setOmittedLocale('nl');
 
         Route::get('some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->getWithCookie('some/route', $cookie);
+        $response = $this->get('some/route');
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -235,13 +217,10 @@ class SetLocaleTest extends TestCase
     }
 
     /** @test */
-    public function it_looks_for_a_locale_on_the_authenticated_user_if_not_found_in_the_url()
+    public function it_looks_for_a_locale_on_the_authenticated_user()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale('fr');
-        $this->setBrowserLocales('it');
+        $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
-        $cookie = 'de';
 
         $attribute = Config::get('localizer.user-attribute');
         $user = new User();
@@ -251,7 +230,7 @@ class SetLocaleTest extends TestCase
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->actingAs($user)->getWithCookie('some/route', $cookie);
+        $response = $this->actingAs($user)->get('some/route');
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -262,77 +241,34 @@ class SetLocaleTest extends TestCase
     public function it_will_bypass_missing_attribute_exception_if_the_locale_attribute_is_missing_on_the_user_model()
     {
         if (version_compare(App::version(), '9.35.0') === -1) {
-            $this->markTestSkipped('This test only applies to Laravel 9 and higher.');
+            $this->markTestSkipped('This test only applies to Laravel 9.35.0 and higher.');
         }
 
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale('fr');
-        $this->setBrowserLocales('it');
+        $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
-        $cookie = 'de';
 
         $user = new User();
-        $user->exists = true;
+        $user->exists = true; // exception is only thrown if user "exists"
         Model::preventAccessingMissingAttributes();
 
         Route::get('some/route', function () {
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->actingAs($user)->getWithCookie('some/route', $cookie);
+        $response = $this->actingAs($user)->get('some/route');
 
-        $response->assertSessionHas($this->sessionKey, 'fr');
-        $response->assertCookie($this->cookieName, 'fr');
-        $this->assertEquals('fr', $response->original);
+        $response->assertSessionHas($this->sessionKey, 'en');
+        $response->assertCookie($this->cookieName, 'en');
+        $this->assertEquals('en', $response->original);
     }
 
     /** @test */
-    public function it_looks_for_a_locale_in_the_session_if_not_found_in_the_url()
+    public function it_looks_for_a_locale_in_the_session()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale('fr');
-        $this->setBrowserLocales('it');
+        $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
-        $cookie = 'de';
 
-        Route::get('some/route', function () {
-            return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
-
-        $response = $this->getWithCookie('some/route', $cookie);
-
-        $response->assertSessionHas($this->sessionKey, 'fr');
-        $response->assertCookie($this->cookieName, 'fr');
-        $this->assertEquals('fr', $response->original);
-    }
-
-    /** @test */
-    public function it_looks_for_a_locale_in_a_cookie_if_not_found_in_the_url_or_session()
-    {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale(null);
-        $this->setBrowserLocales('it');
-        $this->setAppLocale('en');
-        $cookie = 'de';
-
-        Route::get('some/route', function () {
-            return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
-
-        $response = $this->getWithCookie('some/route', $cookie);
-
-        $response->assertSessionHas($this->sessionKey, 'de');
-        $response->assertCookie($this->cookieName, 'de');
-        $this->assertEquals('de', $response->original);
-    }
-
-    /** @test */
-    public function it_looks_for_a_locale_in_the_browser_if_not_found_in_the_url_or_session_or_cookie()
-    {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale(null);
-        $this->setBrowserLocales('it');
-        $this->setAppLocale('en');
+        $this->setSessionLocale('nl');
 
         Route::get('some/route', function () {
             return App::getLocale();
@@ -340,18 +276,56 @@ class SetLocaleTest extends TestCase
 
         $response = $this->get('some/route');
 
-        $response->assertSessionHas($this->sessionKey, 'it');
-        $response->assertCookie($this->cookieName, 'it');
-        $this->assertEquals('it', $response->original);
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function it_looks_for_a_locale_in_a_cookie()
+    {
+        $this->setSupportedLocales(['en', 'nl']);
+        $this->setAppLocale('en');
+
+        $cookie = 'nl';
+
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->getWithCookie('some/route', $cookie);
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
+    }
+
+    /** @test */
+    public function it_looks_for_a_locale_in_the_browser()
+    {
+        $this->setSupportedLocales(['en', 'nl']);
+        $this->setAppLocale('en');
+
+        $this->setBrowserLocales('nl');
+
+        Route::get('some/route', function () {
+            return App::getLocale();
+        })->middleware(['web', SetLocale::class]);
+
+        $response = $this->get('some/route');
+
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
     }
 
     /** @test */
     public function it_returns_the_best_match_when_a_browser_locale_is_used()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale(null);
-        $this->setBrowserLocales('cs,it-IT;q=0.4,es;q=0.8');
+        $this->setSupportedLocales(['en', 'nl', 'fr']);
         $this->setAppLocale('en');
+
+        $this->setBrowserLocales('de,fr;q=0.4,nl-BE;q=0.8');
 
         Route::get('some/route', function () {
             return App::getLocale();
@@ -359,18 +333,16 @@ class SetLocaleTest extends TestCase
 
         $response = $this->get('some/route');
 
-        $response->assertSessionHas($this->sessionKey, 'es');
-        $response->assertCookie($this->cookieName, 'es');
-        $this->assertEquals('es', $response->original);
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
     }
 
     /** @test */
-    public function it_defaults_to_the_current_app_locale()
+    public function it_looks_for_the_current_app_locale()
     {
-        $this->setSupportedLocales(['en', 'nl', 'fr', 'de', 'es', 'it']);
-        $this->setSessionLocale(null);
-        $this->setBrowserLocales(null);
-        $this->setAppLocale('en');
+        $this->setSupportedLocales(['en', 'nl']);
+        $this->setAppLocale('nl');
 
         Route::get('some/route', function () {
             return App::getLocale();
@@ -378,9 +350,9 @@ class SetLocaleTest extends TestCase
 
         $response = $this->get('some/route');
 
-        $response->assertSessionHas($this->sessionKey, 'en');
-        $response->assertCookie($this->cookieName, 'en');
-        $this->assertEquals('en', $response->original);
+        $response->assertSessionHas($this->sessionKey, 'nl');
+        $response->assertCookie($this->cookieName, 'nl');
+        $this->assertEquals('nl', $response->original);
     }
 
     /** @test */
