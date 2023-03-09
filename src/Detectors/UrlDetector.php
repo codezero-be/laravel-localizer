@@ -20,7 +20,7 @@ class UrlDetector implements Detector
 
         // If supported locales is a simple array like ['en', 'nl']
         // just return the slug and let Localizer check if it is supported.
-        if (array_key_exists(0, $locales)) {
+        if (count($locales) === 0 || is_numeric(key($locales))) {
             return $slug;
         }
 
