@@ -25,9 +25,11 @@ class UrlDetector implements Detector
         }
 
         // Find the locale that belongs to the custom domain or slug.
+        // Return the original slug as fallback.
+        // The calling code should validate and handle it.
         $domain = Request::getHttpHost();
         $locales = $this->flipLocalesArray($locales);
-        $locale = $locales[$domain] ?? $locales[$slug] ?? null;
+        $locale = $locales[$domain] ?? $locales[$slug] ?? $slug;
 
         return $locale;
     }
