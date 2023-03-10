@@ -17,12 +17,12 @@ Automatically detect and set an app locale that matches your visitor's preferenc
 - Uses the most common locale [stores](#stores) by default
 - Easily create and add your own detectors and stores
 
-## Requirements
+## ✅ Requirements
 
 - PHP >= 7.1
 - Laravel >= 5.6
 
-## Install
+## 📦 Install
 
 Install this package with Composer:
 
@@ -32,7 +32,7 @@ composer require codezero/laravel-localizer
 
 Laravel will automatically register the ServiceProvider.
 
-## Add Middleware
+## 🧩 Add Middleware
 
 Add the middleware to the `web` middleware group in `app/Http/Kernel.php`.
 Make sure to add it after `StartSession` and before `SubstituteBindings`:
@@ -65,7 +65,7 @@ protected $middlewarePriority = [
 If you don't see the `$middlewarePriority` array in your kernel file,
 then you can copy it over from the parent class `Illuminate\Foundation\Http\Kernel`.
 
-## Configure
+## ⚙️ Configure
 
 ### Publish Configuration File
 
@@ -101,7 +101,7 @@ Or you can use one or more custom domains for a locale:
 ];
 ```
 
-### Configure Detectors (optional)
+## 🔍 Detectors
 
 By default, the middleware will use the following detectors to check for a supported locale in:
 
@@ -114,19 +114,13 @@ By default, the middleware will use the following detectors to check for a suppo
 7. The browser
 8. The app's default locale
 
-If you configure an omitted locale, no additional detectors will run after the `OmittedLocaleDetector`.
-This makes sense, because the locale will always be determined by the URL in this scenario.
-
-You can configure the route action, session key, cookie name and the attribute on the user model that holds the locale.
-By default this is all set to `locale`. If the user model does not have this attribute, it will skip this check.
-
-You can also choose which detectors to run and in what order.
+Update the `detectors` array to choose which detectors to run and in what order.
 
 > You can create your own detector by implementing the `\CodeZero\Localizer\Detectors\Detector` interface
 > and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container,
 > so you can add any dependencies to your constructor.
 
-### Configure Stores (optional)
+## 💾 Stores
 
 The first supported locale that is returned by a detector will automatically be stored in:
 
@@ -134,27 +128,104 @@ The first supported locale that is returned by a detector will automatically be 
 - A cookie
 - The app locale
 
-In the configuration file, you can choose which stores to use.
+Update the `stores` array to choose which stores to use.
 
 > You can create your own store by implementing the `\CodeZero\Localizer\Stores\Store` interface 
 > and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, 
 > so you can add any dependencies to your constructor.
 
-## Testing
+## 🛠️ More Configuration (optional)
+
+### ☑️ `omit-locale`
+
+If you don't want your main locale to have a slug, you can set it as the `omit-locale` (not the custom slug).
+If you do this, no additional detectors will run after the `UrlDetector` and `OmittedLocaleDetector`.
+This makes sense, because the locale will always be determined by those two in this scenario.
+
+Example:
+
+```php
+'omit-locale' => 'en',
+```
+
+Result:
+
+- /example-route (English without slug)
+- /nl/example-route (Other locales with slug)
+
+Default: `null`
+
+### ☑️ `trusted-detectors`
+
+Add any detector class name to this array to make it trusted. (do not remove it from the `detectors` array)
+When a trusted detector returns a locale, it will be used as the app locale, regardless if it's a supported locale or not.
+
+Default: `[]`
+
+### ☑️ `url-segment`
+
+The index of the URL segment that has the locale, when using the `UrlDetector`.
+
+Default: `1`
+
+### ☑️ `route-action`
+
+The custom route action that holds the locale, when using the `RouteActionDetector`.
+
+Default: `locale`
+
+To use the custom route action `locale`, you register a route like this:
+
+```php
+Route::group(['locale' => 'nl'], function () {
+    //Route::get(...);
+});
+```
+
+### ☑️ `user-attribute`
+
+The attribute on the user model that holds the locale, when using the `UserDetector`.
+If the user model does not have this attribute, this detector check will be skipped.
+
+Default: `locale`
+
+### ☑️ `session-key`
+
+The session key that holds the locale, when using the `SessionDetector` and `SessionStore`.
+
+Default: `locale`
+
+### ☑️ `cookie-name`
+
+The name of the cookie that holds the locale, when using the `CookieDetector` and `CookieStore`.
+
+Default: `locale`
+
+### ☑️ `cookie-minutes`
+
+The lifetime of the cookie that holds the locale, when using the `CookieStore`.
+
+Default: `60 * 24 * 365` (1 year)
+
+## 🚧 Testing
 
 ```bash
 composer test
 ```
+## ☕️ Credits
 
-## Security
+- [Ivan Vermeyen](https://github.com/ivanvermeyen)
+- [All contributors](https://github.com/codezero-be/laravel-localizer/contributors)
+
+## 🔒 Security
 
 If you discover any security related issues, please [e-mail me](mailto:ivan@codezero.be) instead of using the issue tracker.
 
-## Changelog
+## 📑 Changelog
 
 A complete list of all notable changes to this package can be found on the
 [releases page](https://github.com/codezero-be/laravel-localizer/releases).
 
-## License
+## 📜 License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
