@@ -136,16 +136,16 @@ Update the `stores` array to choose which stores to use.
 
 ## 🛠️ More Configuration (optional)
 
-### ☑️ `omit-locale`
+### ☑️ `omitted-locale`
 
-If you don't want your main locale to have a slug, you can set it as the `omit-locale` (not the custom slug).
+If you don't want your main locale to have a slug, you can set it as the `omitted-locale` (not the custom slug).
 If you do this, no additional detectors will run after the `UrlDetector` and `OmittedLocaleDetector`.
 This makes sense, because the locale will always be determined by those two in this scenario.
 
 Example:
 
 ```php
-'omit-locale' => 'en',
+'omitted-locale' => 'en',
 ```
 
 Result:
