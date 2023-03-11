@@ -20,7 +20,7 @@ class UserDetector implements Detector
             return null;
         }
 
-        $attribute = Config::get('localizer.user-attribute');
+        $attribute = Config::get('localizer.user_attribute');
 
         return $user->getAttributeValue($attribute);
     }

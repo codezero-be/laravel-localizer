@@ -16,8 +16,8 @@ class CookieStore implements Store
      */
     public function store($locale)
     {
-        $name = Config::get('localizer.cookie-name');
-        $minutes = Config::get('localizer.cookie-minutes');
+        $name = Config::get('localizer.cookie_name');
+        $minutes = Config::get('localizer.cookie_minutes');
 
         Cookie::queue($name, $locale, $minutes);
     }

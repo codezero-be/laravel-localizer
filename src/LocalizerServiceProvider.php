@@ -67,10 +67,10 @@ class LocalizerServiceProvider extends ServiceProvider
     protected function registerLocalizer()
     {
         $this->app->bind(Localizer::class, function ($app) {
-            $locales = $app['config']->get("{$this->name}.supported-locales");
+            $locales = $app['config']->get("{$this->name}.supported_locales");
             $detectors = $app['config']->get("{$this->name}.detectors");
             $stores = $app['config']->get("{$this->name}.stores");
-            $trustedDetectors = $app['config']->get("{$this->name}.trusted-detectors");
+            $trustedDetectors = $app['config']->get("{$this->name}.trusted_detectors");
 
             return new Localizer($locales, $detectors, $stores, $trustedDetectors);
         });

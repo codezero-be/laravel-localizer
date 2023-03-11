@@ -14,7 +14,7 @@ class CookieDetector implements Detector
      */
     public function detect()
     {
-        $key = Config::get('localizer.cookie-name');
+        $key = Config::get('localizer.cookie_name');
 
         return Cookie::get($key);
     }

@@ -5,7 +5,7 @@ return [
     /**
      * The locales you wish to support.
      */
-    'supported-locales' => [],
+    'supported_locales' => [],
 
     /**
      * If your main locale is omitted from the URL, set it here.
@@ -13,7 +13,7 @@ return [
      * Note that no other detectors will run after the OmittedLocaleDetector!
      * Setting this option to `null` will disable this detector.
      */
-    'omitted-locale' => null,
+    'omitted_locale' => null,
 
     /**
      * The detectors to use to find a matching locale.
@@ -35,7 +35,7 @@ return [
      * When a trusted detector returns a locale, it will be used
      * as the app locale, regardless if it's a supported locale or not.
      */
-    'trusted-detectors' => [
+    'trusted_detectors' => [
         //
     ],
 
@@ -52,36 +52,36 @@ return [
      * The index of the segment that has the locale,
      * when using the UrlDetector.
      */
-    'url-segment' => 1,
+    'url_segment' => 1,
 
     /**
      * The attribute or "action" on the route that holds the locale,
      * when using the RouteActionDetector.
      */
-    'route-action' => 'locale',
+    'route_action' => 'locale',
 
     /**
      * The attribute on the user model that holds the locale,
      * when using the UserDetector.
      */
-    'user-attribute' => 'locale',
+    'user_attribute' => 'locale',
 
     /**
      * The session key that holds the locale,
      * when using the SessionDetector and SessionStore.
      */
-    'session-key' => 'locale',
+    'session_key' => 'locale',
 
     /**
      * The name of the cookie that holds the locale,
      * when using the CookieDetector and CookieStore.
      */
-    'cookie-name' => 'locale',
+    'cookie_name' => 'locale',
 
     /**
      * The lifetime of the cookie that holds the locale,
      * when using the CookieStore.
      */
-    'cookie-minutes' => 60 * 24 * 365, // 1 year
+    'cookie_minutes' => 60 * 24 * 365, // 1 year
 
 ];

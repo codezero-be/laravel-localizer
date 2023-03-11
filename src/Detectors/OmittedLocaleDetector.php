@@ -13,6 +13,6 @@ class OmittedLocaleDetector implements Detector
      */
     public function detect()
     {
-        return Config::get('localizer.omitted-locale') ?: null;
+        return Config::get('localizer.omitted_locale') ?: null;
     }
 }
