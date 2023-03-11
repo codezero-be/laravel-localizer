@@ -22,6 +22,11 @@ Automatically detect and set an app locale that matches your visitor's preferenc
 - PHP >= 7.1
 - Laravel >= 5.6
 
+## ⬆️ Upgrade
+
+Upgrading to a new major version?
+Check our [upgrade guide](UPGRADE.md) for instructions.
+
 ## 📦 Install
 
 Install this package with Composer:
