@@ -30,8 +30,8 @@ class SetLocaleTest extends TestCase
         // Remove any default browser locales
         $this->setBrowserLocales(null);
 
-        $this->sessionKey = Config::get('localizer.session-key');
-        $this->cookieName = Config::get('localizer.cookie-name');
+        $this->sessionKey = Config::get('localizer.session_key');
+        $this->cookieName = Config::get('localizer.cookie_name');
     }
 
     /** @test */
@@ -78,7 +78,7 @@ class SetLocaleTest extends TestCase
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
 
-        Config::set('localizer.url-segment', 2);
+        Config::set('localizer.url_segment', 2);
 
         Route::get('some/nl/route', function () {
             return App::getLocale();
@@ -222,7 +222,7 @@ class SetLocaleTest extends TestCase
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
 
-        $attribute = Config::get('localizer.user-attribute');
+        $attribute = Config::get('localizer.user_attribute');
         $user = new User();
         $user->$attribute = 'nl';
 
@@ -363,7 +363,7 @@ class SetLocaleTest extends TestCase
 
         $routeAction = ['locale' => 'nl'];
 
-        Config::set('localizer.trusted-detectors', [
+        Config::set('localizer.trusted_detectors', [
             \CodeZero\Localizer\Detectors\RouteActionDetector::class,
         ]);
 
@@ -403,7 +403,7 @@ class SetLocaleTest extends TestCase
      */
     protected function setSupportedLocales(array $locales)
     {
-        Config::set('localizer.supported-locales', $locales);
+        Config::set('localizer.supported_locales', $locales);
 
         return $this;
     }
@@ -417,7 +417,7 @@ class SetLocaleTest extends TestCase
      */
     protected function setOmittedLocale($locale)
     {
-        Config::set('localizer.omitted-locale', $locale);
+        Config::set('localizer.omitted_locale', $locale);
 
         return $this;
     }

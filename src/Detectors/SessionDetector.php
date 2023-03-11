@@ -14,7 +14,7 @@ class SessionDetector implements Detector
      */
     public function detect()
     {
-        $key = Config::get('localizer.session-key');
+        $key = Config::get('localizer.session_key');
 
         return Session::get($key);
     }

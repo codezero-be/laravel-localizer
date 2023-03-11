@@ -80,13 +80,13 @@ You will now find a `localizer.php` file in the `config` folder.
 Add any locales you wish to support to your published `config/localizer.php` file:
 
 ```php
-'supported-locales' => ['en', 'nl'];
+'supported_locales' => ['en', 'nl'];
 ```
 
 You can also use one or more custom slugs for a locale:
 
 ```php
-'supported-locales' => [
+'supported_locales' => [
     'en' => 'english-slug',
     'nl' => ['dutch-slug', 'nederlandse-slug'],
 ];
@@ -95,7 +95,7 @@ You can also use one or more custom slugs for a locale:
 Or you can use one or more custom domains for a locale:
 
 ```php
-'supported-locales' => [
+'supported_locales' => [
     'en' => 'english-domain.test',
     'nl' => ['dutch-domain.test', 'nederlands-domain.test'],
 ];
@@ -136,16 +136,17 @@ Update the `stores` array to choose which stores to use.
 
 ## 🛠️ More Configuration (optional)
 
-### ☑️ `omitted-locale`
+### ☑️ `omitted_locale`
 
-If you don't want your main locale to have a slug, you can set it as the `omitted-locale` (not the custom slug).
+If you don't want your main locale to have a slug, you can set it as the `omitted_locale` (not the custom slug).
+
 If you do this, no additional detectors will run after the `UrlDetector` and `OmittedLocaleDetector`.
 This makes sense, because the locale will always be determined by those two in this scenario.
 
 Example:
 
 ```php
-'omitted-locale' => 'en',
+'omitted_locale' => 'en',
 ```
 
 Result:
@@ -155,20 +156,20 @@ Result:
 
 Default: `null`
 
-### ☑️ `trusted-detectors`
+### ☑️ `trusted_detectors`
 
 Add any detector class name to this array to make it trusted. (do not remove it from the `detectors` array)
 When a trusted detector returns a locale, it will be used as the app locale, regardless if it's a supported locale or not.
 
 Default: `[]`
 
-### ☑️ `url-segment`
+### ☑️ `url_segment`
 
 The index of the URL segment that has the locale, when using the `UrlDetector`.
 
 Default: `1`
 
-### ☑️ `route-action`
+### ☑️ `route_action`
 
 The custom route action that holds the locale, when using the `RouteActionDetector`.
 
@@ -182,26 +183,26 @@ Route::group(['locale' => 'nl'], function () {
 });
 ```
 
-### ☑️ `user-attribute`
+### ☑️ `user_attribute`
 
 The attribute on the user model that holds the locale, when using the `UserDetector`.
 If the user model does not have this attribute, this detector check will be skipped.
 
 Default: `locale`
 
-### ☑️ `session-key`
+### ☑️ `session_key`
 
 The session key that holds the locale, when using the `SessionDetector` and `SessionStore`.
 
 Default: `locale`
 
-### ☑️ `cookie-name`
+### ☑️ `cookie_name`
 
 The name of the cookie that holds the locale, when using the `CookieDetector` and `CookieStore`.
 
 Default: `locale`
 
-### ☑️ `cookie-minutes`
+### ☑️ `cookie_minutes`
 
 The lifetime of the cookie that holds the locale, when using the `CookieStore`.
 

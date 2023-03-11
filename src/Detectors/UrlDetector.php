@@ -14,8 +14,8 @@ class UrlDetector implements Detector
      */
     public function detect()
     {
-        $locales = Config::get('localizer.supported-locales');
-        $position = Config::get('localizer.url-segment');
+        $locales = Config::get('localizer.supported_locales');
+        $position = Config::get('localizer.url_segment');
         $slug = Request::segment($position);
 
         // If supported locales is a simple array like ['en', 'nl']

@@ -16,7 +16,7 @@ class SessionStore implements Store
      */
     public function store($locale)
     {
-        $key = Config::get('localizer.session-key');
+        $key = Config::get('localizer.session_key');
 
         Session::put($key, $locale);
     }
