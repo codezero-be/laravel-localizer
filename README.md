@@ -19,8 +19,8 @@ Automatically detect and set an app locale that matches your visitor's preferenc
 
 ## ✅ Requirements
 
-- PHP >= 7.1
-- Laravel >= 5.6
+- PHP >= 7.2.5
+- Laravel >= 7.0
 
 ## ⬆️ Upgrade
 
@@ -54,7 +54,7 @@ protected $middlewareGroups = [
 ];
 ```
 
-In Laravel 6.x and higher, you also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php`
+You also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php`
 to trigger it in the correct order:
 
 ```php
