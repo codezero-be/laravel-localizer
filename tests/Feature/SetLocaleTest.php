@@ -293,7 +293,8 @@ class SetLocaleTest extends TestCase
             return App::getLocale();
         })->middleware(['web', SetLocale::class]);
 
-        $response = $this->getWithCookie('some/route', $cookie);
+        $response = $this->withCookie($this->cookieName, $cookie)
+            ->get('some/route');
 
         $response->assertSessionHas($this->sessionKey, 'nl');
         $response->assertCookie($this->cookieName, 'nl');
@@ -450,20 +451,5 @@ class SetLocaleTest extends TestCase
         });
 
         return $this;
-    }
-
-    /**
-     * Perform a GET request when the given cookie was previously set.
-     *
-     * @param string $url
-     * @param string $cookie
-     *
-     * @return \Illuminate\Testing\TestResponse
-     */
-    protected function getWithCookie($url, $cookie)
-    {
-        return version_compare(App::version(), '6.0.0') === -1
-            ? $this->call('GET', $url, [], [$this->cookieName => Crypt::encrypt($cookie, false)])
-            : $this->withCookie($this->cookieName, $cookie)->get($url);
     }
 }
