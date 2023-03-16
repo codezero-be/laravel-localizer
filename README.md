@@ -13,8 +13,8 @@
 Automatically detect and set an app locale that matches your visitor's preference.
 
 - Define your supported locales and match your visitor's preference
-- Uses the most common locale [detectors](#detectors) by default
-- Uses the most common locale [stores](#stores) by default
+- Uses the most common locale [detectors](#-detectors) by default
+- Uses the most common locale [stores](#-stores) by default
 - Easily create and add your own detectors and stores
 
 ## ✅ Requirements
