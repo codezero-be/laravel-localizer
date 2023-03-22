@@ -48,7 +48,6 @@ protected $middlewareGroups = [
         \Illuminate\Session\Middleware\StartSession::class, // <= after this
         //...
         \CodeZero\Localizer\Middleware\SetLocale::class,
-        //...
         \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
     ],
 ];
@@ -62,7 +61,6 @@ protected $middlewarePriority = [
     \Illuminate\Session\Middleware\StartSession::class, // <= after this
     //...
     \CodeZero\Localizer\Middleware\SetLocale::class,
-    //...
     \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
 ];
 ```
