@@ -88,6 +88,8 @@ Add any locales you wish to support to your published `config/localizer.php` fil
 'supported_locales' => ['en', 'nl'];
 ```
 
+By default, the `UrlDetector` will look for these locales in the URL.
+
 You can also use one or more custom slugs for a locale:
 
 ```php
@@ -121,7 +123,7 @@ By default, the middleware will use the following detectors to check for a suppo
 
 Update the `detectors` array to choose which detectors to run and in what order.
 
-> You can create your own detector by implementing the `\CodeZero\Localizer\Detectors\Detector` interface
+> You can create your own detector by implementing the `CodeZero\Localizer\Detectors\Detector` interface
 > and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container,
 > so you can add any dependencies to your constructor.
 
@@ -135,11 +137,11 @@ The first supported locale that is returned by a detector will automatically be 
 
 Update the `stores` array to choose which stores to use.
 
-> You can create your own store by implementing the `\CodeZero\Localizer\Stores\Store` interface 
+> You can create your own store by implementing the `CodeZero\Localizer\Stores\Store` interface 
 > and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, 
 > so you can add any dependencies to your constructor.
 
-## 🛠️ More Configuration (optional)
+## 🛠️ More Configuration
 
 ### ☑️ `omitted_locale`
 
@@ -218,6 +220,7 @@ Default: `60 * 24 * 365` (1 year)
 ```bash
 composer test
 ```
+
 ## ☕️ Credits
 
 - [Ivan Vermeyen](https://github.com/ivanvermeyen)
