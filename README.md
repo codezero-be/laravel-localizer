@@ -22,7 +22,7 @@ Automatically detect and set an app locale that matches your visitor's preferenc
 - PHP >= 7.2.5
 - Laravel >= 7.0
 
-## ⬆️ Upgrade
+## ⬆ Upgrade
 
 Upgrading to a new major version?
 Check our [upgrade guide](UPGRADE.md) for instructions.
@@ -70,7 +70,7 @@ protected $middlewarePriority = [
 If you don't see the `$middlewarePriority` array in your kernel file,
 then you can copy it over from the parent class `Illuminate\Foundation\Http\Kernel`.
 
-## ⚙️ Configure
+## ⚙ Configure
 
 ### Publish Configuration File
 
@@ -141,9 +141,9 @@ Update the `stores` array to choose which stores to use.
 > and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, 
 > so you can add any dependencies to your constructor.
 
-## 🛠️ More Configuration
+## 🛠 More Configuration
 
-### ☑️ `omitted_locale`
+### ☑ `omitted_locale`
 
 If you don't want your main locale to have a slug, you can set it as the `omitted_locale` (not the custom slug).
 
@@ -163,20 +163,20 @@ Result:
 
 Default: `null`
 
-### ☑️ `trusted_detectors`
+### ☑ `trusted_detectors`
 
 Add any detector class name to this array to make it trusted. (do not remove it from the `detectors` array)
 When a trusted detector returns a locale, it will be used as the app locale, regardless if it's a supported locale or not.
 
 Default: `[]`
 
-### ☑️ `url_segment`
+### ☑ `url_segment`
 
 The index of the URL segment that has the locale, when using the `UrlDetector`.
 
 Default: `1`
 
-### ☑️ `route_action`
+### ☑ `route_action`
 
 The custom route action that holds the locale, when using the `RouteActionDetector`.
 
@@ -190,26 +190,26 @@ Route::group(['locale' => 'nl'], function () {
 });
 ```
 
-### ☑️ `user_attribute`
+### ☑ `user_attribute`
 
 The attribute on the user model that holds the locale, when using the `UserDetector`.
 If the user model does not have this attribute, this detector check will be skipped.
 
 Default: `locale`
 
-### ☑️ `session_key`
+### ☑ `session_key`
 
 The session key that holds the locale, when using the `SessionDetector` and `SessionStore`.
 
 Default: `locale`
 
-### ☑️ `cookie_name`
+### ☑ `cookie_name`
 
 The name of the cookie that holds the locale, when using the `CookieDetector` and `CookieStore`.
 
 Default: `locale`
 
-### ☑️ `cookie_minutes`
+### ☑ `cookie_minutes`
 
 The lifetime of the cookie that holds the locale, when using the `CookieStore`.
 
@@ -221,7 +221,7 @@ Default: `60 * 24 * 365` (1 year)
 composer test
 ```
 
-## ☕️ Credits
+## ☕ Credits
 
 - [Ivan Vermeyen](https://github.com/ivanvermeyen)
 - [All contributors](https://github.com/codezero-be/laravel-localizer/contributors)
