@@ -45,10 +45,8 @@ Make sure to add it after `StartSession` and before `SubstituteBindings`:
 ```php
 protected $middlewareGroups = [
     'web' => [
-        \Illuminate\Session\Middleware\StartSession::class, // <= after this
         //...
         \CodeZero\Localizer\Middleware\SetLocale::class,
-        \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
     ],
 ];
 ```
@@ -110,16 +108,18 @@ Or you can use one or more custom domains for a locale:
 
 By default, the middleware will use the following detectors to check for a supported locale in:
 
-1. A custom route action
-2. The URL (domain or slug)
-3. A main omitted locale
-4. The authenticated user model
-5. The session
-6. A cookie
-7. The browser
-8. The app's default locale
+|  #  | Detector                | Description                                                            |
+|:---:|-------------------------|------------------------------------------------------------------------|
+| 1.  | `RouteActionDetector`   | Checks for a locale in a custom route action.                          |
+| 2.  | `UrlDetector`           | Tries to find a locale based on the URL slugs or domain.               |
+| 3.  | `OmittedLocaleDetector` | Required if an omitted locale is configured. This will always be used. |
+| 4.  | `UserDetector`          | Checks a configurable `locale` attribute on the authenticated user.    |
+| 5.  | `SessionDetector`       | Checks the session for a previously stored locale.                     |
+| 6.  | `CookieDetector`        | Checks a cookie for a previously stored locale.                        |
+| 7.  | `BrowserDetector`       | Checks the preferred language settings of the visitor's browser.       |
+| 8.  | `AppDetector`           | Checks the default app locale as a last resort.                        |
 
-Update the `detectors` array to choose which detectors to run and in what order.
+Update the `detectors` array in the config file to choose which detectors to run and in what order.
 
 > You can create your own detector by implementing the `CodeZero\Localizer\Detectors\Detector` interface
 > and add a reference to it in the config file. The detectors are resolved from Laravel's IOC container,
@@ -129,11 +129,13 @@ Update the `detectors` array to choose which detectors to run and in what order.
 
 The first supported locale that is returned by a detector will automatically be stored in:
 
-- The session
-- A cookie
-- The app locale
+|  #  | Store          | Description                               |
+|:---:|----------------|-------------------------------------------|
+| 1.  | `SessionStore` | Stores the locale in the session.         |
+| 2.  | `CookieStore`  | Stores the locale in a cookie.            |
+| 3.  | `AppStore`     | Sets the locale as the active app locale. |
 
-Update the `stores` array to choose which stores to use.
+Update the `stores` array in the config file to choose which stores to use.
 
 > You can create your own store by implementing the `CodeZero\Localizer\Stores\Store` interface 
 > and add a reference to it in the config file. The stores are resolved from Laravel's IOC container, 
