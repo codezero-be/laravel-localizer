@@ -46,25 +46,13 @@ Make sure to add it after `StartSession` and before `SubstituteBindings`:
 protected $middlewareGroups = [
     'web' => [
         //...
+        \Illuminate\Session\Middleware\StartSession::class, // <= after this
+        //...
         \CodeZero\Localizer\Middleware\SetLocale::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
     ],
 ];
 ```
-
-You also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php`
-to trigger it in the correct order:
-
-```php
-protected $middlewarePriority = [
-    \Illuminate\Session\Middleware\StartSession::class, // <= after this
-    //...
-    \CodeZero\Localizer\Middleware\SetLocale::class,
-    \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
-];
-```
-
-If you don't see the `$middlewarePriority` array in your kernel file,
-then you can copy it over from the parent class `Illuminate\Foundation\Http\Kernel`.
 
 ## ⚙ Configure
 
