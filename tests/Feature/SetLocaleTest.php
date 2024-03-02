@@ -44,7 +44,7 @@ class SetLocaleTest extends TestCase
         Route::group($routeAction, function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web', SetLocale::class]);
+            })->middleware(['web']);
         });
 
         $response = $this->get('some/route');
@@ -62,7 +62,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('nl/some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('nl/some/route');
 
@@ -81,7 +81,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/nl/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('some/nl/route');
 
@@ -101,7 +101,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('dutch/some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('dutch/some/route');
 
@@ -121,11 +121,11 @@ class SetLocaleTest extends TestCase
 
         Route::get('dutch/some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         Route::get('nederlands/some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('dutch/some/route');
 
@@ -152,7 +152,7 @@ class SetLocaleTest extends TestCase
         Route::group(['domain' => 'dutch.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web', SetLocale::class]);
+            })->middleware(['web']);
         });
 
         $response = $this->get('http://dutch.test/some/route');
@@ -174,13 +174,13 @@ class SetLocaleTest extends TestCase
         Route::group(['domain' => 'dutch.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web', SetLocale::class]);
+            })->middleware(['web']);
         });
 
         Route::group(['domain' => 'nederlands.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web', SetLocale::class]);
+            })->middleware(['web']);
         });
 
         $response = $this->get('http://dutch.test/some/route');
@@ -206,7 +206,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('some/route');
 
@@ -227,7 +227,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->actingAs($user)->get('some/route');
 
@@ -252,7 +252,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->actingAs($user)->get('some/route');
 
@@ -271,7 +271,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('some/route');
 
@@ -290,7 +290,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->withCookie($this->cookieName, $cookie)
             ->get('some/route');
@@ -310,7 +310,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('some/route');
 
@@ -329,7 +329,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('some/route');
 
@@ -346,7 +346,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web', SetLocale::class]);
+        })->middleware(['web']);
 
         $response = $this->get('some/route');
 
@@ -370,7 +370,7 @@ class SetLocaleTest extends TestCase
         Route::group($routeAction, function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web', SetLocale::class]);
+            })->middleware(['web']);
         });
 
         $response = $this->get('some/route');

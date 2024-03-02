@@ -40,31 +40,22 @@ Laravel will automatically register the ServiceProvider.
 ## 🧩 Add Middleware
 
 Add the middleware to the `web` middleware group in `app/Http/Kernel.php`.
-Make sure to add it after `StartSession` and before `SubstituteBindings`:
+Make sure to add it after `StartSession` and before `SubstituteBindings`.
+
+The order of the middleware is important if you are using localized route keys (translated slugs)!
+The session needs to be active when setting the locale, and the locale needs to be set when substituting the route bindings.
 
 ```php
 protected $middlewareGroups = [
     'web' => [
         //...
+        \Illuminate\Session\Middleware\StartSession::class, // <= after this
+        //...
         \CodeZero\Localizer\Middleware\SetLocale::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
     ],
 ];
 ```
-
-You also need to add the middleware to the `$middlewarePriority` array in `app/Http/Kernel.php`
-to trigger it in the correct order:
-
-```php
-protected $middlewarePriority = [
-    \Illuminate\Session\Middleware\StartSession::class, // <= after this
-    //...
-    \CodeZero\Localizer\Middleware\SetLocale::class,
-    \Illuminate\Routing\Middleware\SubstituteBindings::class, // <= before this
-];
-```
-
-If you don't see the `$middlewarePriority` array in your kernel file,
-then you can copy it over from the parent class `Illuminate\Foundation\Http\Kernel`.
 
 ## ⚙ Configure
 
