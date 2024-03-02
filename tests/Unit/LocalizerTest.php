@@ -10,7 +10,7 @@ use CodeZero\Localizer\Tests\TestCase;
 use Illuminate\Support\Facades\App;
 use Mockery;
 
-class LocalizerTest extends TestCase
+final class LocalizerTest extends TestCase
 {
     #[Test]
     public function it_loops_through_the_detectors_and_returns_the_first_supported_locale(): void

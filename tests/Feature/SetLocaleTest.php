@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-class SetLocaleTest extends TestCase
+final class SetLocaleTest extends TestCase
 {
     protected $sessionKey;
     protected $cookieName;
