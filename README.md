@@ -1,7 +1,7 @@
 # Laravel Localizer
 
 [![GitHub release](https://img.shields.io/github/release/codezero-be/laravel-localizer.svg?style=flat-square)](https://github.com/codezero-be/laravel-localizer/releases)
-[![Laravel](https://img.shields.io/badge/laravel-10-red?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![Laravel](https://img.shields.io/badge/laravel-11-red?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
 [![License](https://img.shields.io/packagist/l/codezero/laravel-localizer.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/codezero-be/laravel-localizer/run-tests.yml?style=flat-square&logo=github&logoColor=white&label=tests)](https://github.com/codezero-be/laravel-localizer/actions)
 [![Code Coverage](https://img.shields.io/codacy/coverage/ad6fcea152b449d380a187a375d0f7d7/master?style=flat-square)](https://app.codacy.com/gh/codezero-be/laravel-localizer)
@@ -19,8 +19,8 @@ Automatically detect and set an app locale that matches your visitor's preferenc
 
 ## ✅ Requirements
 
-- PHP >= 7.2.5
-- Laravel >= 7.0
+- PHP >= 8.1
+- Laravel >= 19.0
 
 ## ⬆ Upgrade
 

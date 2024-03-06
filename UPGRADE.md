@@ -1,5 +1,14 @@
 # Upgrade Guide
 
+## Upgrading To 3.0 From 2.x
+
+### ➡ Minimum Requirements Updated
+
+Due to PHP and PHPUnit version constraints with Laravel 11, we dropped support for Laravel 7.x, 8.x and 9.x.
+
+- The minimum PHP version required is now 8.1
+- The minimum Laravel version required is now 10.0
+
 ## Upgrading To 2.0 From 1.x
 
 ### ➡ Minimum Requirements Updated
