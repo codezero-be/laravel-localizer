@@ -20,7 +20,7 @@ Automatically detect and set an app locale that matches your visitor's preferenc
 ## ✅ Requirements
 
 - PHP >= 8.1
-- Laravel >= 19.0
+- Laravel >= 10.0
 
 ## ⬆ Upgrade
 
