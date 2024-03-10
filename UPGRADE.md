@@ -9,6 +9,17 @@ Due to PHP and PHPUnit version constraints with Laravel 11, we dropped support f
 - The minimum PHP version required is now 8.1
 - The minimum Laravel version required is now 10.0
 
+---
+
+### ➡ Re-register Middleware
+
+Laravel 11 no longer has a `app/Http/Kernel.php` to register middleware.
+This is now handled in `bootstrap/app.php`.
+
+🔸 **Actions Required**
+
+If you use Laravel 11, register the middleware in `bootstrap/app.php` as described in the README.
+
 ## Upgrading To 2.0 From 1.x
 
 ### ➡ Minimum Requirements Updated
