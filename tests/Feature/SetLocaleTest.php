@@ -2,6 +2,7 @@
 
 namespace CodeZero\Localizer\Tests\Feature;
 
+use PHPUnit\Framework\Attributes\Test;
 use CodeZero\BrowserLocale\BrowserLocale;
 use CodeZero\Localizer\Middleware\SetLocale;
 use CodeZero\Localizer\Tests\TestCase;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
-class SetLocaleTest extends TestCase
+final class SetLocaleTest extends TestCase
 {
     protected $sessionKey;
     protected $cookieName;
@@ -33,8 +34,8 @@ class SetLocaleTest extends TestCase
         $this->cookieName = Config::get('localizer.cookie_name');
     }
 
-    /** @test */
-    public function it_looks_for_a_locale_in_a_custom_route_action()
+    #[Test]
+    public function it_looks_for_a_locale_in_a_custom_route_action(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
@@ -44,7 +45,7 @@ class SetLocaleTest extends TestCase
         Route::group($routeAction, function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web']);
+            })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
         });
 
         $response = $this->get('some/route');
@@ -54,15 +55,15 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_a_locale_in_the_url()
+    #[Test]
+    public function it_looks_for_a_locale_in_the_url(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
 
         Route::get('nl/some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('nl/some/route');
 
@@ -71,8 +72,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function you_can_configure_which_segment_to_use_as_locale()
+    #[Test]
+    public function you_can_configure_which_segment_to_use_as_locale(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
@@ -81,7 +82,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/nl/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('some/nl/route');
 
@@ -90,8 +91,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_custom_slugs()
+    #[Test]
+    public function it_looks_for_custom_slugs(): void
     {
         $this->setSupportedLocales([
             'en' => 'english',
@@ -101,7 +102,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('dutch/some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('dutch/some/route');
 
@@ -110,8 +111,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function you_can_use_multiple_slugs_for_a_locale()
+    #[Test]
+    public function you_can_use_multiple_slugs_for_a_locale(): void
     {
         $this->setSupportedLocales([
             'en' => 'english',
@@ -121,11 +122,11 @@ class SetLocaleTest extends TestCase
 
         Route::get('dutch/some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         Route::get('nederlands/some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('dutch/some/route');
 
@@ -140,8 +141,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_custom_domains()
+    #[Test]
+    public function it_looks_for_custom_domains(): void
     {
         $this->setSupportedLocales([
             'en' => 'english.test',
@@ -152,7 +153,7 @@ class SetLocaleTest extends TestCase
         Route::group(['domain' => 'dutch.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web']);
+            })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
         });
 
         $response = $this->get('http://dutch.test/some/route');
@@ -162,8 +163,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function you_can_use_multiple_domains_for_a_locale()
+    #[Test]
+    public function you_can_use_multiple_domains_for_a_locale(): void
     {
         $this->setSupportedLocales([
             'en' => 'english.test',
@@ -174,13 +175,13 @@ class SetLocaleTest extends TestCase
         Route::group(['domain' => 'dutch.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web']);
+            })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
         });
 
         Route::group(['domain' => 'nederlands.test'], function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web']);
+            })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
         });
 
         $response = $this->get('http://dutch.test/some/route');
@@ -196,8 +197,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_checks_for_a_configured_omitted_locale()
+    #[Test]
+    public function it_checks_for_a_configured_omitted_locale(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
@@ -206,7 +207,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('some/route');
 
@@ -215,8 +216,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_a_locale_on_the_authenticated_user()
+    #[Test]
+    public function it_looks_for_a_locale_on_the_authenticated_user(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
@@ -227,7 +228,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->actingAs($user)->get('some/route');
 
@@ -236,8 +237,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_will_bypass_missing_attribute_exception_if_the_locale_attribute_is_missing_on_the_user_model()
+    #[Test]
+    public function it_will_bypass_missing_attribute_exception_if_the_locale_attribute_is_missing_on_the_user_model(): void
     {
         if (version_compare(App::version(), '9.35.0') === -1) {
             $this->markTestSkipped('This test only applies to Laravel 9.35.0 and higher.');
@@ -252,7 +253,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->actingAs($user)->get('some/route');
 
@@ -261,8 +262,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('en', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_a_locale_in_the_session()
+    #[Test]
+    public function it_looks_for_a_locale_in_the_session(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
@@ -271,7 +272,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('some/route');
 
@@ -280,8 +281,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_a_locale_in_a_cookie()
+    #[Test]
+    public function it_looks_for_a_locale_in_a_cookie(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
@@ -290,7 +291,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->withCookie($this->cookieName, $cookie)
             ->get('some/route');
@@ -300,8 +301,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_a_locale_in_the_browser()
+    #[Test]
+    public function it_looks_for_a_locale_in_the_browser(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('en');
@@ -310,7 +311,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('some/route');
 
@@ -319,8 +320,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_returns_the_best_match_when_a_browser_locale_is_used()
+    #[Test]
+    public function it_returns_the_best_match_when_a_browser_locale_is_used(): void
     {
         $this->setSupportedLocales(['en', 'nl', 'fr']);
         $this->setAppLocale('en');
@@ -329,7 +330,7 @@ class SetLocaleTest extends TestCase
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('some/route');
 
@@ -338,15 +339,15 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function it_looks_for_the_current_app_locale()
+    #[Test]
+    public function it_looks_for_the_current_app_locale(): void
     {
         $this->setSupportedLocales(['en', 'nl']);
         $this->setAppLocale('nl');
 
         Route::get('some/route', function () {
             return App::getLocale();
-        })->middleware(['web']);
+        })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
 
         $response = $this->get('some/route');
 
@@ -355,8 +356,8 @@ class SetLocaleTest extends TestCase
         $this->assertEquals('nl', $response->original);
     }
 
-    /** @test */
-    public function trusted_detectors_ignore_supported_locales_and_may_set_any_locale()
+    #[Test]
+    public function trusted_detectors_ignore_supported_locales_and_may_set_any_locale(): void
     {
         $this->setSupportedLocales(['en']);
         $this->setAppLocale('en');
@@ -370,7 +371,7 @@ class SetLocaleTest extends TestCase
         Route::group($routeAction, function () {
             Route::get('some/route', function () {
                 return App::getLocale();
-            })->middleware(['web']);
+            })->middleware(['web', \CodeZero\Localizer\Middleware\SetLocale::class]);
         });
 
         $response = $this->get('some/route');

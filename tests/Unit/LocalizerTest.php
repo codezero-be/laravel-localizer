@@ -2,6 +2,7 @@
 
 namespace CodeZero\Localizer\Tests\Unit;
 
+use PHPUnit\Framework\Attributes\Test;
 use CodeZero\Localizer\Detectors\Detector;
 use CodeZero\Localizer\Localizer;
 use CodeZero\Localizer\Stores\Store;
@@ -9,10 +10,10 @@ use CodeZero\Localizer\Tests\TestCase;
 use Illuminate\Support\Facades\App;
 use Mockery;
 
-class LocalizerTest extends TestCase
+final class LocalizerTest extends TestCase
 {
-    /** @test */
-    public function it_loops_through_the_detectors_and_returns_the_first_supported_locale()
+    #[Test]
+    public function it_loops_through_the_detectors_and_returns_the_first_supported_locale(): void
     {
         $supportedLocales = ['en', 'nl'];
         $detectors = [
@@ -26,8 +27,8 @@ class LocalizerTest extends TestCase
         $this->assertEquals('nl', $localizer->detect());
     }
 
-    /** @test */
-    public function it_returns_the_first_match_if_an_array_of_locales_is_detected()
+    #[Test]
+    public function it_returns_the_first_match_if_an_array_of_locales_is_detected(): void
     {
         $supportedLocales = ['en', 'nl'];
         $detectors = [
@@ -39,8 +40,8 @@ class LocalizerTest extends TestCase
         $this->assertEquals('nl', $localizer->detect());
     }
 
-    /** @test */
-    public function trusted_detectors_ignore_supported_locales_and_may_set_any_locale()
+    #[Test]
+    public function trusted_detectors_ignore_supported_locales_and_may_set_any_locale(): void
     {
         $supportedLocales = ['en'];
         $detectors = [
@@ -55,8 +56,8 @@ class LocalizerTest extends TestCase
         $this->assertEquals('nl', $localizer->detect());
     }
 
-    /** @test */
-    public function it_skips_null_and_false_and_empty_values()
+    #[Test]
+    public function it_skips_null_and_false_and_empty_values(): void
     {
         App::instance(Detector::class, Mockery::mock(Detector::class)->allows()->detect()->andReturns('')->getMock());
 
@@ -75,8 +76,8 @@ class LocalizerTest extends TestCase
         $this->assertEquals('nl', $localizer->detect());
     }
 
-    /** @test */
-    public function it_skips_null_and_false_and_empty_values_from_trusted_detectors()
+    #[Test]
+    public function it_skips_null_and_false_and_empty_values_from_trusted_detectors(): void
     {
         App::instance(Detector::class, Mockery::mock(Detector::class)->allows()->detect()->andReturns('')->getMock());
 
@@ -98,8 +99,8 @@ class LocalizerTest extends TestCase
         $this->assertEquals('nl', $localizer->detect());
     }
 
-    /** @test */
-    public function it_returns_false_if_no_supported_locale_could_be_detected()
+    #[Test]
+    public function it_returns_false_if_no_supported_locale_could_be_detected(): void
     {
         $supportedLocales = ['en'];
         $detectors = [
@@ -113,8 +114,8 @@ class LocalizerTest extends TestCase
         $this->assertFalse($localizer->detect());
     }
 
-    /** @test */
-    public function it_loops_through_the_stores_and_calls_the_store_method_with_the_given_locale()
+    #[Test]
+    public function it_loops_through_the_stores_and_calls_the_store_method_with_the_given_locale(): void
     {
         $stores = [
             Mockery::mock(Store::class)->expects()->store('nl')->once()->getMock(),
@@ -127,8 +128,8 @@ class LocalizerTest extends TestCase
         $localizer->store('nl');
     }
 
-    /** @test */
-    public function it_accepts_class_names_instead_of_instances_in_the_constructor()
+    #[Test]
+    public function it_accepts_class_names_instead_of_instances_in_the_constructor(): void
     {
         App::instance(Store::class, Mockery::mock(Store::class)->expects()->store('nl')->once()->getMock());
         App::instance(Detector::class, Mockery::mock(Detector::class)->expects()->detect()->once()->getMock());
@@ -142,8 +143,8 @@ class LocalizerTest extends TestCase
         $localizer->store('nl');
     }
 
-    /** @test */
-    public function you_can_set_the_supported_locales_at_runtime()
+    #[Test]
+    public function you_can_set_the_supported_locales_at_runtime(): void
     {
         $supportedLocales = ['en'];
         $detectors = [

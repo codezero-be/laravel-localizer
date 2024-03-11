@@ -1,7 +1,7 @@
 # Laravel Localizer
 
 [![GitHub release](https://img.shields.io/github/release/codezero-be/laravel-localizer.svg?style=flat-square)](https://github.com/codezero-be/laravel-localizer/releases)
-[![Laravel](https://img.shields.io/badge/laravel-10-red?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
+[![Laravel](https://img.shields.io/badge/laravel-11-red?style=flat-square&logo=laravel&logoColor=white)](https://laravel.com)
 [![License](https://img.shields.io/packagist/l/codezero/laravel-localizer.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/codezero-be/laravel-localizer/run-tests.yml?style=flat-square&logo=github&logoColor=white&label=tests)](https://github.com/codezero-be/laravel-localizer/actions)
 [![Code Coverage](https://img.shields.io/codacy/coverage/ad6fcea152b449d380a187a375d0f7d7/master?style=flat-square)](https://app.codacy.com/gh/codezero-be/laravel-localizer)
@@ -19,8 +19,8 @@ Automatically detect and set an app locale that matches your visitor's preferenc
 
 ## ✅ Requirements
 
-- PHP >= 7.2.5
-- Laravel >= 7.0
+- PHP >= 8.1
+- Laravel >= 10.0
 
 ## ⬆ Upgrade
 
@@ -39,13 +39,36 @@ Laravel will automatically register the ServiceProvider.
 
 ## 🧩 Add Middleware
 
-Add the middleware to the `web` middleware group in `app/Http/Kernel.php`.
+By default, the app locale will always be what you configured in `config/app.php`.
+To automatically update the app locale, you need to register the middleware in the `web` middleware group.
 Make sure to add it after `StartSession` and before `SubstituteBindings`.
 
 The order of the middleware is important if you are using localized route keys (translated slugs)!
 The session needs to be active when setting the locale, and the locale needs to be set when substituting the route bindings.
 
+### Laravel 11 and newer:
+
+Add the middleware to the `web` middleware group in `bootstrap/app.php`.
+
 ```php
+// bootstrap/app.php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(remove: [
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    ]);
+    $middleware->web(append: [
+        \CodeZero\Localizer\Middleware\SetLocale::class,
+        \Illuminate\Routing\Middleware\SubstituteBindings::class,
+    ]);
+})
+```
+
+### Laravel 10:
+
+Add the middleware to the `web` middleware group in `app/Http/Kernel.php`.
+
+```php
+// app/Http/Kernel.php
 protected $middlewareGroups = [
     'web' => [
         //...
